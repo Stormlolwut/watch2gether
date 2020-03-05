@@ -25,6 +25,7 @@
     "@ionic/angular": "^5.0.0",
     "@ionic/pwa-elements": "^1.4.1",
     "core-js": "^3.6.4",
+    "global": "^4.4.0",
     "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
@@ -34,7 +35,7 @@
     "@angular-devkit/build-angular": "~0.900.1",
     "@angular-devkit/core": "^9.0.1",
     "@angular-devkit/schematics": "^9.0.1",
-    "@angular/cli": "^9.0.1",
+    "@angular/cli": "9.0.5",
     "@angular/compiler": "^9.0.0",
     "@angular/compiler-cli": "^9.0.0",
     "@angular/language-service": "^9.0.0",
