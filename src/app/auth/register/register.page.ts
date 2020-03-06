@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TeamRocketService } from '../../services/team-rocket.service';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class RegisterPage implements OnInit {
   public registerForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private teamRocketService: TeamRocketService) {
 
   }
 
@@ -21,8 +22,7 @@ export class RegisterPage implements OnInit {
     });
   }
 
-  logForm()
-  {
-    console.log(this.registerForm.value);
+  logForm() {
+    console.log(this.teamRocketService.getAPIUrl());
   }
 }
