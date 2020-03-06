@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TeamRocketService } from '../../services/team-rocket.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -11,18 +11,18 @@ import { TeamRocketService } from '../../services/team-rocket.service';
 export class RegisterPage implements OnInit {
   public registerForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private teamRocketService: TeamRocketService) {
+  constructor(private formBuilder: FormBuilder, private userService: UserService) {
 
   }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
   logForm() {
-    console.log(this.teamRocketService.getAPIUrl());
+    this.userService.signUpUser();
   }
 }

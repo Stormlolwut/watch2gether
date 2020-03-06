@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { RegisterPageRoutingModule } from './register-routing.module';
 
 import { RegisterPage } from './register.page';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -16,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     IonicModule,
     RegisterPageRoutingModule,
-    HttpClientModule,
   ],
   declarations: [RegisterPage],
 })
