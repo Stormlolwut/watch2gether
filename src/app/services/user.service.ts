@@ -25,4 +25,10 @@ export class UserService {
       console.log(response);
     })
   }
+
+  public login(): boolean {
+    // TODO: http post om in te loggen.
+
+    return true;
+  }
 }
