@@ -9,20 +9,44 @@ import { UserService } from '../../services/user.service';
 })
 
 export class LoginPage implements OnInit {
-  public registerForm: FormGroup;
+  public loginFormGroup: FormGroup;
+  public registerFormGroup: FormGroup;
+
+  public isRegistering: boolean;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService) {
-
+    this.isRegistering = false;
   }
 
   ngOnInit() {
-    this.registerForm = this.formBuilder.group({
+    this.loginFormGroup = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
+    });
+
+    this.registerFormGroup = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      againPassword: ['', Validators.required],
     });
   }
 
   logForm() {
+    // TODO: Login user
+
+    
+  }
+
+  registerForm() {
+    // TODO: Register user
     this.userService.signUpUser();
+  }
+
+  stateRegister() {
+    this.isRegistering = true;
+  }
+
+  stateLogin() {
+    this.isRegistering = false;
   }
 }
