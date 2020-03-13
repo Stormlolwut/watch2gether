@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
     this.isRegistering = false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginFormGroup = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -31,22 +31,23 @@ export class LoginPage implements OnInit {
     });
   }
 
-  logForm() {
-    // TODO: Login user
-
-    
+  onLoginSuccess(token: string): void {
+    console.log(token)
   }
 
-  registerForm() {
-    // TODO: Register user
-    this.userService.signUpUser();
+  logForm(): void {
+    this.userService.login(this.loginFormGroup.get('email').value, this.loginFormGroup.get('password').value, this.onLoginSuccess)
   }
 
-  stateRegister() {
+  registerForm(): void {
+    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, this.onLoginSuccess);
+  }
+
+  stateRegister(): void {
     this.isRegistering = true;
   }
 
-  stateLogin() {
+  stateLogin(): void {
     this.isRegistering = false;
   }
 }
