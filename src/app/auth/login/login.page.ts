@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { UserService } from '../../services/user/user.service';
+
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,7 @@ export class LoginPage implements OnInit {
 
   public isRegistering: boolean;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService) {
     this.isRegistering = false;
   }
 
@@ -32,15 +35,16 @@ export class LoginPage implements OnInit {
   }
 
   onLoginSuccess(token: string): void {
-    console.log(token)
+    this.router.navigate(['home']);
+    console.log("test")
   }
 
   logForm(): void {
-    this.userService.login(this.loginFormGroup.get('email').value, this.loginFormGroup.get('password').value, this.onLoginSuccess)
+    this.userService.login(this.loginFormGroup.get('email').value, this.loginFormGroup.get('password').value, (token: string) => { this.onLoginSuccess(token) })
   }
 
   registerForm(): void {
-    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, this.onLoginSuccess);
+    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, (token: string) => { this.onLoginSuccess(token) });
   }
 
   stateRegister(): void {

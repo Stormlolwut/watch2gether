@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserResponse}  from './UserResponse';
+import { UserResponse } from './UserResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +29,9 @@ export class UserService {
 
   public signUpUser(email: string, password: string, onSuccess: (token: string) => void): void {
     this.httpClient.post<UserResponse>(this.signUpURL(), { email: email, password: password }, this.httpOptions).subscribe((response) => {
-      if (response.message == "ok") {
+      if (this.checkSuccessLogin(response)) {
         onSuccess(response.token);
+        return;
       }
 
       console.log(response);
@@ -39,11 +40,16 @@ export class UserService {
 
   public login(email: string, password: string, onSuccess: (token: string) => void): void {
     this.httpClient.post<UserResponse>(this.loginURL(), { email: email, password: password }, this.httpOptions).subscribe((response) => {
-      if (response.message == "ok") {
+      if (this.checkSuccessLogin(response)) {
         onSuccess(response.token);
+        return;
       }
 
       console.log(response);
     })
+  }
+
+  private checkSuccessLogin(response: UserResponse): boolean {
+    return (response.message == "ok");
   }
 }
