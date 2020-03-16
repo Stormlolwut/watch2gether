@@ -1,3 +1,4 @@
+import { AuthResponse } from './../auth-response';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -34,17 +35,16 @@ export class LoginPage implements OnInit {
     });
   }
 
-  onLoginSuccess(token: string): void {
-    this.router.navigate(['home']);
-    console.log("test")
+  onLoginSuccess(response: AuthResponse): void {
+    this.router.navigate(['']);
   }
 
   logForm(): void {
-    this.userService.login(this.loginFormGroup.get('email').value, this.loginFormGroup.get('password').value, (token: string) => { this.onLoginSuccess(token) })
+    this.userService.login(this.loginFormGroup.get('email').value, this.loginFormGroup.get('password').value, (response: AuthResponse) => { this.onLoginSuccess(response) })
   }
 
   registerForm(): void {
-    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, (token: string) => { this.onLoginSuccess(token) });
+    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, (response: AuthResponse) => { this.onLoginSuccess(response) });
   }
 
   stateRegister(): void {

@@ -1,3 +1,6 @@
+import { UserResponse } from './../user-response';
+import { Router } from '@angular/router';
+import { UserService } from './../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
+    this.userService.getAllUsers((response: UserResponse) => {}, () => {});
   }
 
+  private onLoggedOut(): void {
+
+  }
 }
