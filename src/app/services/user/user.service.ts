@@ -1,7 +1,8 @@
+import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserResponse } from './../../user-response';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
 import { AuthResponse } from '../../auth/auth-response';
@@ -12,12 +13,7 @@ import { AuthResponse } from '../../auth/auth-response';
 })
 
 export class UserService {
-  private userToken: string;
-
   constructor(private httpClient: HttpClient, private storage: Storage, private router: Router) {
-    storage.get("ACCESS_TOKEN").then((value) => {
-      this.userToken = value;
-    });
   }
 
   private httpOptions = {
@@ -49,25 +45,13 @@ export class UserService {
 
 
 
-  private handleError(error: HttpErrorResponse) {
-    console.log(error);
-
-    if (error.status == 401) {
-      console.log("Not Authorized");
-    }
-
-    this.router.navigate(["login"]);
-  }
-
-  public clientHasToken(): boolean {
-    return this.userToken != null;
-  }
-
   public getAllUsers(success: (response: UserResponse) => void, error: () => void): void {
-    this.httpClient.get<UserResponse>(this.getAllUsersURL(), this.getHeaderAuthToken()).subscribe((response) => {
+    this.httpClient.get<UserResponse>(this.getAllUsersURL()).subscribe((response) => {
       console.log(response);
     },
-      error => this.handleError(error));
+    error =>  {
+      throwError(error);
+    });
   }
 
   public signUpUser(email: string, password: string, onSuccess: (token: AuthResponse) => void): void {
@@ -76,8 +60,6 @@ export class UserService {
         this.SuccessLogin(response, onSuccess);
         return;
       }
-
-      console.log(response);
     })
   }
 
@@ -87,16 +69,12 @@ export class UserService {
         this.SuccessLogin(response, onSuccess);
         return;
       }
-
-      console.log(response);
     })
   }
 
   private async SuccessLogin(response: AuthResponse, onSuccess: (token: AuthResponse) => void) {
     await this.storage.set("ACCESS_TOKEN", response.user.token);
     await this.storage.set("EXPIRES_IN", 100000);
-
-    this.userToken = response.user.token;
 
     onSuccess(response);
   }
@@ -106,13 +84,5 @@ export class UserService {
     await this.storage.remove("EXPIRES_IN");
 
     onSuccess();
-  }
-
-  private getHeaderAuthToken(): object {
-    const headers = new HttpHeaders({
-      'Authorization': 'BEARER ' + this.userToken,
-    })
-
-    return { headers }
   }
 }
