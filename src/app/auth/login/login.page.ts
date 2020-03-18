@@ -31,12 +31,24 @@ export class LoginPage implements OnInit {
     this.registerFormGroup = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
-      againPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    }, {
+      validator: this.MatchPassword
     });
   }
 
+  MatchPassword(FG: FormGroup) {
+    let password = FG.get('password').value; // to get value in input tag
+    let confirmPassword = FG.get('confirmPassword').value; // to get value in input tag
+     if(password != confirmPassword) {
+         FG.get('confirmPassword').setErrors( { MatchPassword: true } )
+     } else {
+         return null
+     }
+ }
+
   onLoginSuccess(response: AuthResponse): void {
-    this.router.navigate(['']);
+    this.router.navigate(['rooms']);
   }
 
   logForm(): void {
@@ -44,7 +56,7 @@ export class LoginPage implements OnInit {
   }
 
   registerForm(): void {
-    this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, (response: AuthResponse) => { this.onLoginSuccess(response) });
+      this.userService.signUpUser(this.registerFormGroup.get('email').value, this.registerFormGroup.get('password').value, (response: AuthResponse) => { this.onLoginSuccess(response) });
   }
 
   stateRegister(): void {

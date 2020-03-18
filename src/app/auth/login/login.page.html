@@ -41,21 +41,25 @@
                   </ion-item>
 
                   <ion-item>
-                    <ion-input placeholder="Enter Password" type="text" formControlName="password"></ion-input>
+                    <ion-input placeholder="Enter Password" type="password" formControlName="password"></ion-input>
                   </ion-item>
 
                   <ion-item>
-                    <ion-input placeholder="Enter Password" type="text" formControlName="againPassword"></ion-input>
+                    <ion-input placeholder="Enter Password" type="password" formControlName="confirmPassword">
+                    </ion-input>
                   </ion-item>
 
-                  <ion-item lines="none" class="button-item">
+                  <div class="button-item">
                     <ion-button size="default" type="submit">register</ion-button>
                     <ion-button size="default" (click)="stateLogin()">
                       Close
                     </ion-button>
-                  </ion-item>
+                  </div>
                 </ion-list>
               </form>
+              
+              <div class="alert alert-danger" *ngIf="registerFormGroup.controls.confirmPassword.errors?.MatchPassword">
+                Password not match</div>
             </ion-card-content>
           </ion-card>
         </ng-template>

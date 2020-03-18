@@ -45,13 +45,11 @@ export class UserService {
 
 
 
-  public getAllUsers(success: (response: UserResponse) => void, error: () => void): void {
+  public getAllUsers(success: (response: UserResponse) => void, err: () => void): void {
     this.httpClient.get<UserResponse>(this.getAllUsersURL()).subscribe((response) => {
-      console.log(response);
+      success(response);
     },
-    error =>  {
-      throwError(error);
-    });
+      error => err());
   }
 
   public signUpUser(email: string, password: string, onSuccess: (token: AuthResponse) => void): void {
@@ -74,14 +72,12 @@ export class UserService {
 
   private async SuccessLogin(response: AuthResponse, onSuccess: (token: AuthResponse) => void) {
     await this.storage.set("ACCESS_TOKEN", response.user.token);
-    await this.storage.set("EXPIRES_IN", 100000);
 
     onSuccess(response);
   }
 
   public async Logout(onSuccess: () => void) {
     await this.storage.remove("ACCESS_TOKEN");
-    await this.storage.remove("EXPIRES_IN");
 
     onSuccess();
   }

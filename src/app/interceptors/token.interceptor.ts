@@ -15,9 +15,7 @@ import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
     constructor(private router: Router, private toastController: ToastController, private storage: Storage) {
@@ -45,26 +43,12 @@ export class TokenInterceptor implements HttpInterceptor {
                             return event;
                         }),
                         catchError((error: HttpErrorResponse) => {
-                            const status = error.status;
-                            const reason = error && error.error.reason ? error.error.reason : '';
-                            
                             this.router.navigate(['login']);
 
-                            this.presentAlert(status, reason);
                             return throwError(error);
                         })
                     );
                 })
             );
-    }
-
-    async presentAlert(status, reason) {
-        const alert = await this.toastController.create({
-            header: status + ' Error',
-            message: reason,
-            buttons: ['OK']
-        });
-
-        await alert.present();
     }
 }

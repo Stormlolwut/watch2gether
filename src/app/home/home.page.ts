@@ -13,9 +13,19 @@ export class HomePage implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
-    this.userService.getAllUsers((response: UserResponse) => {}, () => {});
+    
   }
+  
+//   async presentAlert(status, reason) {
+//     const alert = await this.toastController.create({
+//         header: status + ' Error',
+//         message: reason,
+//         buttons: ['OK'],
+//         duration: 2000
+//     });
 
+//     await alert.present();
+// }
   private onLoggedOut(): void {
 
   }
