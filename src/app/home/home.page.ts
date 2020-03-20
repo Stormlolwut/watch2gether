@@ -1,4 +1,3 @@
-import { UserResponse } from './../user-response';
 import { Router } from '@angular/router';
 import { UserService } from './../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,19 +13,5 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     
-  }
-  
-//   async presentAlert(status, reason) {
-//     const alert = await this.toastController.create({
-//         header: status + ' Error',
-//         message: reason,
-//         buttons: ['OK'],
-//         duration: 2000
-//     });
-
-//     await alert.present();
-// }
-  private onLoggedOut(): void {
-
   }
 }

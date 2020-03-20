@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserResponse } from './../../user-response';
@@ -13,6 +14,8 @@ import { AuthResponse } from '../../auth/auth-response';
 })
 
 export class UserService {
+  public RedirectUrl: string;
+
   constructor(private httpClient: HttpClient, private storage: Storage, private router: Router) {
   }
 
@@ -27,7 +30,7 @@ export class UserService {
 
 
   private serverURL(): string {
-    return 'http://localhost:3000/';
+    return environment.serverURL;
   }
 
   private signUpURL(): string {
@@ -75,7 +78,7 @@ export class UserService {
 
     onSuccess(response);
   }
-
+  
   public async Logout(onSuccess: () => void) {
     await this.storage.remove("ACCESS_TOKEN");
 

@@ -45,10 +45,23 @@ export class TokenInterceptor implements HttpInterceptor {
                         catchError((error: HttpErrorResponse) => {
                             this.router.navigate(['login']);
 
+                            this.presentAlert(error.status, error.message);
+
                             return throwError(error);
                         })
                     );
                 })
             );
     }
+
+  async presentAlert(status, reason) {
+    const alert = await this.toastController.create({
+        header: status + ' Error',
+        message: reason,
+        buttons: ['OK'],
+        duration: 2000
+    });
+
+    await alert.present();
+}
 }
