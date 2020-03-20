@@ -1,12 +1,10 @@
+import { AuthResponse } from './../../interfaces/auth-response';
 import { environment } from './../../../environments/environment';
-import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserResponse } from './../../user-response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-
-import { AuthResponse } from '../../auth/auth-response';
 
 
 @Injectable({
@@ -78,10 +76,19 @@ export class UserService {
 
     onSuccess(response);
   }
-  
-  public async Logout(onSuccess: () => void) {
+
+  public async Logout(onSuccess?: () => void) {
     await this.storage.remove("ACCESS_TOKEN");
 
     onSuccess();
+  }
+
+  public async UserHasLoggedIn(): Promise<boolean> {
+    var loggedIn: boolean = false;
+    await this.storage.get("ACCESS_TOKEN").then((value) => {
+      loggedIn = value != null;
+    })
+
+    return loggedIn;
   }
 }

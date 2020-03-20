@@ -1,4 +1,4 @@
-import { AuthResponse } from './../auth-response';
+import { AuthResponse } from '../../interfaces/auth-response';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';

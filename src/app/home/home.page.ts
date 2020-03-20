@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { UserService } from './../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  public canShowLogoutButton: boolean = false;
+
+  constructor(private userService: UserService) {
+    userService.UserHasLoggedIn().then((value) => {
+      this.canShowLogoutButton = value;
+    });
+  }
 
   ngOnInit() {
-    
+
+  }
+
+  public logout(): void {
+    this.userService.Logout();
   }
 }
