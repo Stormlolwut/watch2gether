@@ -1,5 +1,5 @@
-export interface RoomResponse {
-    room: {
+export interface RoomsResponse {
+    rooms: [{
         id: string,
         name: string,
         password: string,
@@ -12,7 +12,7 @@ export interface RoomResponse {
         },
         messages: Array<MessageInterface>,
         videos: Array<VideosInterface>
-    }
+    }]
 }
 
 interface MessageInterface {

@@ -80,7 +80,10 @@ export class UserService {
   public async Logout(onSuccess?: () => void) {
     await this.storage.remove("ACCESS_TOKEN");
 
-    onSuccess();
+    if(onSuccess)
+    {
+      onSuccess();
+    }
   }
 
   public async UserHasLoggedIn(): Promise<boolean> {

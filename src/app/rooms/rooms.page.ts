@@ -1,6 +1,6 @@
-import { RoomsResponse } from './../interfaces/room-response';
+import { RoomResponse } from './../interfaces/room-response';
+import { RoomsResponse } from '../interfaces/rooms-response';
 import { RoomService } from './../services/rooms/room.service';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 
@@ -12,10 +12,10 @@ import { MenuController } from '@ionic/angular';
 
 
 export class RoomsPage implements OnInit {
-  public items: any[] = [];
-  rotateImg: number = 0;
+  public items: RoomResponse[] = [];
 
-  constructor(private menuController: MenuController, private roomService: RoomService, private httpClient: HttpClient) {
+  constructor(private menuController: MenuController, public roomService: RoomService) {
+    
     roomService.GetRooms((response: RoomsResponse) => this.setRooms(response));
   }
 
@@ -25,18 +25,14 @@ export class RoomsPage implements OnInit {
 
   setRooms(rooms: RoomsResponse) {
     rooms.rooms.forEach(element => {
-      this.items.push({
-        index: this.items.length,
-        name: element.name,
-      })
+      this.items.push({ room: element });
     });
 
     this.items = [...this.items];
   }
 
-  public onCardClick(listIndex: number) {
-    // TODO: /rooms mag niet alle gegevens returnen: "Zoals password". Zo kan iedereen zien wat de wachtwoord is van de room uit het lijst.
-    // TODO: pak het ID van het room en ga naar volgende pagina -> vraag daarna het informatie op van het room.
-    console.log(this.items[listIndex]);
+  public onCardClick(room: RoomResponse) {
+    console.log(room);
+    this.roomService.OpenRoom(room);
   }
 }
