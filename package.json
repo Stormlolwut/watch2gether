@@ -27,6 +27,7 @@
     "@ionic/storage": "^2.2.0",
     "core-js": "^3.6.4",
     "global": "^4.4.0",
+    "ngx-autosize": "^1.7.5",
     "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
