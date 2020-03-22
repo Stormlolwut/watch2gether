@@ -15,7 +15,7 @@ export interface RoomResponse {
     }
 }
 
-interface MessageInterface {
+export interface MessageInterface {
     user: string,
     line: string,
     timestamp: Date,

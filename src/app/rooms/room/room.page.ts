@@ -1,9 +1,9 @@
+import { MessageInterface } from './../../interfaces/room-response';
 import { RoomService } from './../../services/rooms/room.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
-import { Platform, IonGrid, IonContent } from '@ionic/angular';
-import { Content } from '@angular/compiler/src/render3/r3_ast';
+import { Platform, IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-room',
@@ -11,128 +11,7 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
   styleUrls: ['./room.page.scss'],
 })
 export class RoomPage implements OnInit {
-  messages = [
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'storm',
-      createdAt: 1554090956000,
-      msg: 'ey ey ey bitch'
-    },
-    {
-      user: 'storm',
-      createdAt: 15540901056000,
-      msg: 'I am totally gay lol xD :3'
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'storm',
-      createdAt: 1554090956000,
-      msg: 'ey ey ey bitch'
-    },
-    {
-      user: 'storm',
-      createdAt: 15540901056000,
-      msg: 'I am totally gay lol xD :3'
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'storm',
-      createdAt: 1554090956000,
-      msg: 'ey ey ey bitch'
-    },
-    {
-      user: 'storm',
-      createdAt: 15540901056000,
-      msg: 'I am totally gay lol xD :3'
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'storm',
-      createdAt: 1554090956000,
-      msg: 'ey ey ey bitch'
-    },
-    {
-      user: 'storm',
-      createdAt: 15540901056000,
-      msg: 'I am totally gay lol xD :3'
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-    {
-      user: 'huseyin',
-      createdAt: 1554090856000,
-      msg: "yo yo yoo bitch"
-    },
-  ]
+  messages : [MessageInterface];
 
   currentUser = "huseyin";
   newMsg = "";
@@ -145,7 +24,6 @@ export class RoomPage implements OnInit {
       switchMap((params: ParamMap) =>
         this.roomService.GetRoom(params.get('id')))
     ).subscribe((value) => {
-      console.log(value);
     });
   }
 
@@ -159,8 +37,8 @@ export class RoomPage implements OnInit {
   sendMessage() {
     this.messages.push({
       user: "huseyin",
-      createdAt: new Date().getTime(),
-      msg: this.newMsg
+      timestamp: new Date(new Date().getTime()),
+      line: this.newMsg
     })
 
     this.newMsg = "";

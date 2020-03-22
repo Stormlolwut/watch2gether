@@ -1,3 +1,5 @@
+import { RoomPageRoutingModule } from './../../rooms/room/room-routing.module';
+import { MessageInterface } from './../../interfaces/room-response';
 import { Observable } from 'rxjs';
 import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -29,5 +31,11 @@ export class RoomService {
 
   public GetRoom(roomName: string): Observable<RoomResponse> {
     return this.httpClient.get<RoomResponse>(environment.serverURL + "rooms/" + roomName, {});
+  }
+
+  getMessages(onSuccess: (value: Array<MessageInterface>) => void) {
+    this.httpClient.get<Array<MessageInterface>>(environment.serverURL + "rooms/" + this.selectedRoom.room.name + "/messages", {}).subscribe((value) => {
+      onSuccess(value);
+    });
   }
 } 
