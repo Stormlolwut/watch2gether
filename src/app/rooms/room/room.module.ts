@@ -6,10 +6,13 @@ import { RoomPageRoutingModule } from './room-routing.module';
 
 import { RoomPage } from './room.page';
 
+import { AutosizeModule } from "ngx-autosize";
+
 @NgModule({
   imports: [
     RoomPageRoutingModule,
-    SharedModule
+    SharedModule,
+    AutosizeModule,
   ],
   declarations: [RoomPage],
 })
