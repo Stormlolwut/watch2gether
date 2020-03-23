@@ -11,7 +11,7 @@ import { Platform, IonContent } from '@ionic/angular';
   styleUrls: ['./room.page.scss'],
 })
 export class RoomPage implements OnInit {
-  messages : [MessageInterface];
+  messages: [MessageInterface];
 
   currentUser = "huseyin";
   newMsg = "";
@@ -35,14 +35,18 @@ export class RoomPage implements OnInit {
 
 
   sendMessage() {
-    this.messages.push({
-      user: "huseyin",
-      timestamp: new Date(new Date().getTime()),
-      line: this.newMsg
-    })
+    this.roomService.postMessage(this.newMsg,
+      (response) => {
+        this.messages.push({
+          user: "huseyin",
+          timestamp: new Date(new Date().getTime()),
+          line: this.newMsg
+        });
+      },
+      () => { }
+    );
 
     this.newMsg = "";
-
     setTimeout(() => {
       this.content.scrollToBottom(200);
     })

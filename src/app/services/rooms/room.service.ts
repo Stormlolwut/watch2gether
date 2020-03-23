@@ -38,4 +38,12 @@ export class RoomService {
       onSuccess(value);
     });
   }
+
+  postMessage(msg: string, onSuccess: (message: MessageInterface) => void, onError: (error: any) => void) {
+    this.httpClient.post<MessageInterface>(environment.serverURL + "rooms/" + this.selectedRoom.room.name + "/messages", { line: msg })
+      .subscribe((value) => {
+        onSuccess(value);
+      },
+        error => onError(error));
+  }
 } 
