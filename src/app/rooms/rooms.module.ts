@@ -9,6 +9,6 @@ import { RoomsPage } from './rooms.page';
     RoomsPageRoutingModule,
     SharedModule
   ],
-  declarations: [RoomsPage]
+  declarations: [RoomsPage],
 })
 export class RoomsPageModule { }

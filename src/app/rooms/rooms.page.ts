@@ -20,7 +20,7 @@ export class RoomsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.menuController.close();
+    // this.menuController.close();
   }
 
   setRooms(rooms: RoomsResponse) {

@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { UserService } from './../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,43 +8,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
+  public username: string = "";
+
   public selectedIndex = 0;
   public appPages = [
     {
-      title: 'Inbox',
-      url: '/folder/Inbox',
-      icon: 'mail'
+      title: 'Home',
+      url: '/',
+      icon: 'home'
     },
     {
-      title: 'Outbox',
-      url: '/folder/Outbox',
-      icon: 'paper-plane'
+      title: 'Rooms',
+      url: '/rooms',
+      icon: 'images'
     },
     {
-      title: 'Favorites',
-      url: '/folder/Favorites',
-      icon: 'heart'
+      title: 'Profile',
+      url: '/profile',
+      icon: 'person'
     },
-    {
-      title: 'Archived',
-      url: '/folder/Archived',
-      icon: 'archive'
-    },
-    {
-      title: 'Trash',
-      url: '/folder/Trash',
-      icon: 'trash'
-    },
-    {
-      title: 'Spam',
-      url: '/folder/Spam',
-      icon: 'warning'
-    }
   ];
 
-  constructor() {
+  constructor(private userService: UserService, private router: Router) {
+    setTimeout(() => {
+      this.username = userService.Username;
+    })
   }
 
-  ngOnInit() { }
-
+  ngOnInit() { 
+    console.log("test");
+  }
 }

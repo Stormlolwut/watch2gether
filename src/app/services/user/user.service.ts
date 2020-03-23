@@ -1,3 +1,4 @@
+import { throwError } from 'rxjs';
 import { AuthResponse } from './../../interfaces/auth-response';
 import { environment } from './../../../environments/environment';
 import { Router } from '@angular/router';
@@ -10,11 +11,30 @@ import { Storage } from '@ionic/storage';
 @Injectable({
   providedIn: 'root'
 })
-
 export class UserService {
   public RedirectUrl: string;
 
-  constructor(private httpClient: HttpClient, private storage: Storage, private router: Router) {
+  private readonly ACCESSTOKEN: string = "ACCESS_TOKEN";
+  private readonly USERNAME: string = "USERNAME";
+
+  public Username: string = "";
+
+  public OnUserInfoReceived: [(userInfo: UserResponse) => void]
+
+  constructor(private httpClient: HttpClient, private storage: Storage) {
+    storage.get(this.USERNAME).then((value) => {
+      this.Username = value;
+    });
+  }
+
+  private getUserInformation() {
+    this.httpClient.get<UserResponse>(environment.serverURL, {}).subscribe((value) => {
+      console.log(value)
+      this.OnUserInfoReceived.forEach(element => {
+        element(value);
+      }),
+        error => { console.log(error); }
+    });
   }
 
   private httpOptions = {
@@ -72,23 +92,23 @@ export class UserService {
   }
 
   private async SuccessLogin(response: AuthResponse, onSuccess: (token: AuthResponse) => void) {
-    await this.storage.set("ACCESS_TOKEN", response.user.token);
+    await this.storage.set(this.ACCESSTOKEN, response.user.token);
+    await this.storage.set(this.USERNAME, response.user.name);
 
     onSuccess(response);
   }
 
   public async Logout(onSuccess?: () => void) {
-    await this.storage.remove("ACCESS_TOKEN");
+    await this.storage.remove(this.ACCESSTOKEN);
 
-    if(onSuccess)
-    {
+    if (onSuccess) {
       onSuccess();
     }
   }
 
   public async UserHasLoggedIn(): Promise<boolean> {
     var loggedIn: boolean = false;
-    await this.storage.get("ACCESS_TOKEN").then((value) => {
+    await this.storage.get(this.ACCESSTOKEN).then((value) => {
       loggedIn = value != null;
     })
 
