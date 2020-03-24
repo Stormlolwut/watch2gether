@@ -1,3 +1,4 @@
+import { SharedModule } from './shared.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { NgModule } from '@angular/core';
@@ -13,7 +14,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, SharedModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,

@@ -1,8 +1,5 @@
-import { throwError } from 'rxjs';
 import { AuthResponse } from './../../interfaces/auth-response';
 import { environment } from './../../../environments/environment';
-import { Router } from '@angular/router';
-import { UserResponse } from './../../user-response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
@@ -15,22 +12,19 @@ export class UserService {
   public RedirectUrl: string;
 
   private readonly ACCESSTOKEN: string = "ACCESS_TOKEN";
-  private readonly USERNAME: string = "USERNAME";
 
   public Username: string = "";
 
-  public OnUserInfoReceived: [(userInfo: UserResponse) => void]
+  public OnUserInfoReceived: Array<(userInfo: AuthResponse) => void>
 
   constructor(private httpClient: HttpClient, private storage: Storage) {
-    storage.get(this.USERNAME).then((value) => {
-      this.Username = value;
-    });
+    this.OnUserInfoReceived = new Array<(userInfo: AuthResponse) => void>();
+    this.getUserInformation();
   }
 
   private getUserInformation() {
-    this.httpClient.get<UserResponse>(environment.serverURL, {}).subscribe((value) => {
-      console.log(value)
-      this.OnUserInfoReceived.forEach(element => {
+    this.httpClient.get<AuthResponse>(environment.serverURL, {}).subscribe((value) => {
+      this.OnUserInfoReceived?.forEach(element => {
         element(value);
       }),
         error => { console.log(error); }
@@ -66,8 +60,8 @@ export class UserService {
 
 
 
-  public getAllUsers(success: (response: UserResponse) => void, err: () => void): void {
-    this.httpClient.get<UserResponse>(this.getAllUsersURL()).subscribe((response) => {
+  public getAllUsers(success: (response: AuthResponse) => void, err: () => void): void {
+    this.httpClient.get<AuthResponse>(this.getAllUsersURL()).subscribe((response) => {
       success(response);
     },
       error => err());
@@ -93,7 +87,6 @@ export class UserService {
 
   private async SuccessLogin(response: AuthResponse, onSuccess: (token: AuthResponse) => void) {
     await this.storage.set(this.ACCESSTOKEN, response.user.token);
-    await this.storage.set(this.USERNAME, response.user.name);
 
     onSuccess(response);
   }
