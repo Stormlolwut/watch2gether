@@ -22,6 +22,10 @@ export class UserService {
     this.getUserInformation();
   }
 
+  public getToken() : Promise<string> {
+    return this.storage.get(this.ACCESSTOKEN);
+  }
+
   private getUserInformation() {
     this.httpClient.get<AuthResponse>(environment.serverURL, {}).subscribe((value) => {
       this.OnUserInfoReceived?.forEach(element => {

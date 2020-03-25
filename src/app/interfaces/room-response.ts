@@ -1,3 +1,5 @@
+import {UserResponseInterface} from './auth-response';
+
 export interface RoomResponse {
     room: {
         id: string,
@@ -16,9 +18,15 @@ export interface RoomResponse {
 }
 
 export interface MessageInterface {
-    user: string,
+    user: UserResponseInterface,
     line: string,
     timestamp: Date,
+}
+
+export interface AllMessagesInterface {
+    statusCode: number,
+    message: string,
+    messages: MessageInterface[],
 }
 
 interface VideosInterface {

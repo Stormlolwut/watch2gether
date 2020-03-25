@@ -1,54 +1,70 @@
-import { MessageInterface } from './../../interfaces/room-response';
-import { RoomService } from './../../services/rooms/room.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { switchMap } from 'rxjs/operators';
-import { Platform, IonContent } from '@ionic/angular';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {switchMap} from 'rxjs/operators';
+import {Platform, IonContent} from '@ionic/angular';
+
+import {RoomService} from '../../services/rooms/room.service';
+import {AllMessagesInterface, MessageInterface} from '../../interfaces/room-response';
 
 @Component({
-  selector: 'app-room',
-  templateUrl: './room.page.html',
-  styleUrls: ['./room.page.scss'],
+    selector: 'app-room',
+    templateUrl: './room.page.html',
+    styleUrls: ['./room.page.scss']
 })
 export class RoomPage implements OnInit {
-  messages: [MessageInterface];
+    public messages: Array<any>;
 
-  currentUser = "huseyin";
-  newMsg = "";
+    public currentUser = 'huseyin';
+    public newMsg = '';
 
-  @ViewChild("content") content: IonContent;
+    @ViewChild('content') content: IonContent;
 
+    constructor(
+        private route: ActivatedRoute,
+        private roomService: RoomService,
+        public plt: Platform
+    ) {
+        this.messages = new Array<any>();
+        this.route.paramMap
+            .pipe(
+                switchMap((params: ParamMap) =>
+                    this.roomService.GetRoom(params.get('id'))
+                )
+            )
+            .subscribe(value => {
+            });
 
-  constructor(private route: ActivatedRoute, private roomService: RoomService, public plt: Platform) {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.roomService.GetRoom(params.get('id')))
-    ).subscribe((value) => {
-    });
-  }
+        roomService.onMessageReceived.push((message: string) => {
+            this.messages.push({
+                username: 'huseyin',
+                timestamp: new Date().getTime(),
+                line: message
+            });
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.content.scrollToBottom(200);
-    })
-  }
+            setTimeout(() => {
+                this.content.scrollToBottom(200);
+            });
+        })
+    }
 
+    ngOnInit() {
+        this.roomService.getMessages((value: AllMessagesInterface) => {
+            console.log(value);
+            value.messages.forEach(value1 => {
+                this.messages.push({
+                    username: value1.user.name,
+                    timestamp: value1.timestamp,
+                    line: value1.line
+                });
+            });
 
-  sendMessage() {
-    this.roomService.postMessage(this.newMsg,
-      (response) => {
-        this.messages.push({
-          user: "huseyin",
-          timestamp: new Date(new Date().getTime()),
-          line: this.newMsg
+            setTimeout(() => {
+                this.content.scrollToBottom(200);
+            }, 50);
         });
-      },
-      () => { }
-    );
+    }
 
-    this.newMsg = "";
-    setTimeout(() => {
-      this.content.scrollToBottom(200);
-    })
-  }
+    sendMessage() {
+        this.roomService.postMessage(this.newMsg);
+    }
 }

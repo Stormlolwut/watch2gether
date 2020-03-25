@@ -1,3 +1,5 @@
+import {MessageInterface} from './room-response';
+
 export interface RoomsResponse {
     rooms: [{
         id: string,
@@ -13,12 +15,6 @@ export interface RoomsResponse {
         messages: Array<MessageInterface>,
         videos: Array<VideosInterface>
     }]
-}
-
-interface MessageInterface {
-    user: string,
-    line: string,
-    timestamp: Date,
 }
 
 interface VideosInterface {
