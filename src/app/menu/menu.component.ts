@@ -46,9 +46,6 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuController.getMenus().then(value => {
-      console.log(value);
-    });
     const path = window.location.pathname.split("/")[1];
 
     if (path !== undefined) {

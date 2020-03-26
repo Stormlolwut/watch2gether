@@ -1,73 +1,77 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>room</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>room</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 
 <ion-content style="height: 100%">
-  <ion-grid style="height: 100%">
-    <ion-row style="height: 100%;">
-      <ion-col style="height: 100%" size="4">
-        <ion-grid style="height: 100%">
-          <ion-row style="height: 80%">
-            <ion-col style="max-height: 100%">
-              <ion-content style="max-height: 100%; overflow-y: auto;" #content>
-                <ion-row align-items-center text-center>
-                  <ion-col size="12">
-                    <ion-grid style="max-height: 100%;">
-                      <ion-row *ngFor="let message of messages">
-                        <ion-col size="9" *ngIf="currentUser !== message.username" class="message other-message">
-                          <b>{{ message.username }}</b><br>
-                          <span> {{ message.line }} </span>
-                          <div class="time ion-text-right"><br>
-                            {{ message.timestamp | date:'short' }}
-                          </div>
+    <ion-grid style="height: 100%">
+        <ion-row style="height: 100%;">
+            <ion-col style="height: 100%" size="4">
+                <ion-grid style="height: 100%">
+                    <ion-row style="height: 80%">
+                        <ion-col style="max-height: 100%">
+                            <ion-content style="max-height: 100%; overflow-y: auto;" #content>
+                                <ion-row align-items-center text-center>
+                                    <ion-col size="12">
+                                        <ion-grid style="max-height: 100%;">
+                                            <ion-row *ngFor="let message of messages">
+                                                <ion-col size="9" *ngIf="currentUser !== message.username"
+                                                         class="message other-message">
+                                                    <b>{{ message.username }}</b><br>
+                                                    <span> {{ message.line }} </span>
+                                                    <div class="time ion-text-right"><br>
+                                                        {{ message.timestamp | date:'short' }}
+                                                    </div>
+                                                </ion-col>
+
+                                                <ion-col size="9" offset="3" *ngIf="currentUser === message.username"
+                                                         class="message my-message">
+                                                    <b>{{ message.username }}</b><br>
+                                                    <span> {{ message.line }} </span>
+                                                    <div class="time ion-text-right"><br>
+                                                        {{ message.timestamp | date:'short' }}
+                                                    </div>
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-content>
                         </ion-col>
-
-                        <ion-col size="9" offset="3" *ngIf="currentUser === message.username" class="message my-message">
-                          <b>{{ message.username }}</b><br>
-                          <span> {{ message.line }} </span>
-                          <div class="time ion-text-right"><br>
-                            {{ message.timestamp | date:'short' }}
-                          </div>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="12" align-self-end *ngIf="plt.is('desktop')">
+                            <ion-row color="light" class="ion-align-items-center">
+                                <ion-col size="10">
+                                    <textarea autosize maxRows="5" [(ngModel)]="newMsg"
+                                              class="message-input"></textarea>
+                                </ion-col>
+                                <ion-col size="2">
+                                    <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg === ''"
+                                                class="msg-btn"
+                                                (click)="sendMessage()">
+                                        <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
                         </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-col>
-                </ion-row>
-              </ion-content>
+                    </ion-row>
+                </ion-grid>
             </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12" align-self-end *ngIf="plt.is('desktop')">
-              <ion-row color="light" class="ion-align-items-center">
-                <ion-col size="10">
-                  <textarea autosize maxRows="5" [(ngModel)]="newMsg" class="message-input"></textarea>
-                </ion-col>
-                <ion-col size="2">
-                  <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg === ''" class="msg-btn"
-                    (click)="sendMessage()">
-                    <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-                  </ion-button>
-                </ion-col>
-              </ion-row>
+            <ion-col>
+                <app-youtube-player-angular></app-youtube-player-angular>
             </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-col>
-      <ion-col>
+        </ion-row>
 
-      </ion-col>
-    </ion-row>
+        <ion-row>
 
-    <ion-row>
-
-    </ion-row>
-  </ion-grid>
+        </ion-row>
+    </ion-grid>
 </ion-content>
 
 <!-- // TODO: mobile only -->

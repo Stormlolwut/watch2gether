@@ -24,7 +24,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        return from(this.storage.get("ACCESS_TOKEN"))
+        return from(this.storage.get('ACCESS_TOKEN'))
             .pipe(
                 switchMap(token => {
                     if (token) {
@@ -44,7 +44,6 @@ export class TokenInterceptor implements HttpInterceptor {
                         }),
                         catchError((error: HttpErrorResponse) => {
                             this.router.navigate(['login']);
-
                             this.presentAlert(error.status, error.message);
 
                             return throwError(error);

@@ -1,10 +1,8 @@
-import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {switchMap} from 'rxjs/operators';
 import {Platform, IonContent} from '@ionic/angular';
 
 import {RoomService} from '../../services/rooms/room.service';
-import {AllMessagesInterface, MessageInterface} from '../../interfaces/room-response';
+import {AllMessagesInterface} from '../../interfaces/room-response';
 
 @Component({
     selector: 'app-room',
@@ -20,19 +18,11 @@ export class RoomPage implements OnInit {
     @ViewChild('content') content: IonContent;
 
     constructor(
-        private route: ActivatedRoute,
         private roomService: RoomService,
         public plt: Platform
     ) {
         this.messages = new Array<any>();
-        this.route.paramMap
-            .pipe(
-                switchMap((params: ParamMap) =>
-                    this.roomService.GetRoom(params.get('id'))
-                )
-            )
-            .subscribe(value => {
-            });
+
 
         roomService.onMessageReceived.push((message: string) => {
             this.messages.push({
@@ -49,7 +39,6 @@ export class RoomPage implements OnInit {
 
     ngOnInit() {
         this.roomService.getMessages((value: AllMessagesInterface) => {
-            console.log(value);
             value.messages.forEach(value1 => {
                 this.messages.push({
                     username: value1.user.name,

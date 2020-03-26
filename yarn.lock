@@ -248,6 +248,14 @@
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-9.0.7.tgz#0296d11a17a6b94c0463c9b166dc4244b8fea5e5"
   integrity sha512-uKru9F/Zju//gg6INl54abnlpLdEUUO/GpCfMk4zqu8LCZGNFta6OY7VT+9DK9Vdrh/XUD70oE9WoelcRwwTYA==
 
+"@angular/youtube-player@^9.2.0":
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/youtube-player/-/youtube-player-9.2.0.tgz#a53f357ad8b099fb09841b74d3e2e3023e07fbc6"
+  integrity sha512-IQGA7knxqdLVVyJqXbAGvBL0WlbQx8JfSDV0q3ktl51VOL/N2YJOHmkCedS0riAKQvJR/h/7S5vBS0xamy6p4Q==
+  dependencies:
+    "@types/youtube" "^0.0.38"
+    tslib "^1.9.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5", "@babel/code-frame@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"
@@ -977,6 +985,20 @@
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-1.5.1.tgz#9a0120ae500f37c6dc38b25c6ecfbe131013f70a"
   integrity sha512-6b8o/U87KIRWj3OLT+RrStTS56FWF7/dJkFe75XS5PBZPlWl8dKB3MUb3oKpWX5E7Y105Yo8CA/fKOSk8QQzsg==
 
+"@ionic-native/core@^5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.23.0.tgz#69bb05a5491c94c1f8656246a237d4caa2e41d41"
+  integrity sha512-AQ+l9GnRVLnnbXWhAImywTxk62GNtOfmX2U0hJw/dtRAjZZn8C3u9Pszcbw9pN0I/yc1PKFvNqxa8nFP7XrzRQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/youtube-video-player@^5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/youtube-video-player/-/youtube-video-player-5.23.0.tgz#7f3ad92e4179adda17a3effd38d029c64a976767"
+  integrity sha512-HD6KVxLAAZiL/4mZaw2Z/pAbCLp7iqvEOx3+Dg6wLhfmDtl55tJaLjmyEaK49BS6cMn2xbFqWCFcJP0QsBf7kg==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/angular-toolkit@^2.1.2":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ionic/angular-toolkit/-/angular-toolkit-2.2.0.tgz#0960898113a6022d0736aaa734c05af2c02ae508"
@@ -1065,6 +1087,11 @@
     semver "6.3.0"
     semver-intersect "1.4.0"
 
+"@types/cordova@latest":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
+  integrity sha1-6nrd907Ow9dimCegw54smt3HPQQ=
+
 "@types/estree@*":
   version "0.0.44"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.44.tgz#980cc5a29a3ef3bea6ff1f7d021047d7ea575e21"
@@ -1139,6 +1166,11 @@
     "@types/node" "*"
     "@types/source-list-map" "*"
     source-map "^0.6.1"
+
+"@types/youtube@^0.0.38":
+  version "0.0.38"
+  resolved "https://registry.yarnpkg.com/@types/youtube/-/youtube-0.0.38.tgz#04aa5efa61f4d52e9cf682575a9dfed58f31e8c1"
+  integrity sha512-rS0nLlnnZIvOfBNT4957rkKRMHjHxutoVhSEzowocYgNiTMVBmN+Hbkf/L3TeGMMtts9uKZ9gw7O2JLHREVnIw==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
@@ -2533,6 +2565,11 @@ copy-webpack-plugin@5.1.1:
     schema-utils "^1.0.0"
     serialize-javascript "^2.1.2"
     webpack-log "^2.0.0"
+
+cordova-plugin-youtube-video-player@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-youtube-video-player/-/cordova-plugin-youtube-video-player-2.4.0.tgz#95bc526fa9da6264f74ab670678767aad7423eb1"
+  integrity sha512-j4//ijoZkkvbU9ryb+bPQLTYrvmOLVyrpbQiwaHHHUv4MVsaTr6hkJEKu1uTUPFI4W1sorlkwO51C32hwhJrzg==
 
 core-js-compat@^3.6.0:
   version "3.6.4"

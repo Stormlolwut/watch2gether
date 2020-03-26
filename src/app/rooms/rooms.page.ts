@@ -32,7 +32,6 @@ export class RoomsPage implements OnInit {
     }
 
     public onCardClick(room: RoomResponse) {
-        console.log(room);
         this.roomService.OpenRoom(room);
     }
 }
