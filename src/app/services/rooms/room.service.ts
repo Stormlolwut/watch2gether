@@ -41,10 +41,10 @@ export class RoomService {
                     if (token !== undefined && token !== null && token.length > 0) {
                         this.socket = io(environment.serverURL + 'chat', {query: {token}});
                         this.socket.emit('join room', {roomId: roomResponse.room.id});
-                        this.socket.on('chat message', msg => {
-                            this.onMessageReceived.forEach((value1: (message: string) => void) => {
-                                value1(msg);
-                            })
+
+                        // tslint:disable-next-line:only-arrow-functions
+                        this.socket.on('big-announcement', function(room) {
+                            console.log(room);
                         });
                     }
                 })
@@ -82,7 +82,8 @@ export class RoomService {
     }
 
     public postMessage(msg: string) {
-        this.socket.emit('my message', {message: msg, roomId: this.selectedRoom.room.id});
+        this.socket.emit('my message', {roomId: 'a_room_2', msg: 'WAUW'});
+        // this.socket.emit('my message', {message: msg, roomId: this.selectedRoom.room.id});
     }
 
     private checkIfRoomIsOpen(shouldNaviagetBack: boolean): boolean {
