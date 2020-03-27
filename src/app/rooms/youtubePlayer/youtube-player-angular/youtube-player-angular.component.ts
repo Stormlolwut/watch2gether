@@ -17,7 +17,6 @@ export class YoutubePlayerAngularComponent implements OnInit {
 
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
-
   }
 
 

@@ -1,4 +1,4 @@
-import { RoomPageModule } from './rooms/room/room.module';
+import { RoomPageModule } from './rooms/room/view-room/room.module';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
@@ -22,7 +22,11 @@ const routes: Routes = [
   },
   {
     path: 'room/:id',
-    loadChildren: () => import('./rooms/room/room.module').then(m => m.RoomPageModule)
+    loadChildren: () => import('./rooms/room/view-room/room.module').then(m => m.RoomPageModule)
+  },
+  {
+    path: 'createRoom',
+    loadChildren: () => import('./rooms/room/create-room/create-room.module').then(m => m.CreateRoomPageModule)
   }
 ];
 @NgModule({

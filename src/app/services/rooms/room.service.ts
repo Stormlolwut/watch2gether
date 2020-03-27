@@ -34,25 +34,37 @@ export class RoomService {
         this.onMessageReceived = new Array<(message: string) => void>();
         this.selectedRoom = null;
 
-        userService.getToken().then(token => {
-            if (token !== undefined && token !== null && token.length > 0) {
-                this.socket = io(environment.serverURL, {query: {token}});
-                this.socket.on('chat message', msg => {
-                    this.onMessageReceived.forEach((value1: (message: string) => void) => {
-                        value1(msg);
-                    })
-                });
-            }
-        });
+
+        if (this.checkIfRoomIsOpen(false)) {
+            this.checkIfRoomIsSelected().then((roomResponse: RoomResponse) => {
+                userService.getToken().then(token => {
+                    if (token !== undefined && token !== null && token.length > 0) {
+                        this.socket = io(environment.serverURL + 'chat', {query: {token}});
+                        this.socket.emit('join room', {roomId: roomResponse.room.id});
+                        this.socket.on('chat message', msg => {
+                            this.onMessageReceived.forEach((value1: (message: string) => void) => {
+                                value1(msg);
+                            })
+                        });
+                    }
+                })
+            })
+        }
     }
 
-    public OpenRoom(response: RoomResponse) {
+    public OpenRoomPage(response: RoomResponse) {
         this.selectedRoom = response;
         this.router.navigate(['/room', response.room.id]);
     }
 
-    getMessages(onSuccess: (value: AllMessagesInterface) => void) {
-        this.checkIfRoomIsOpen();
+    public async CreateRoom(name: string): Promise<RoomResponse> {
+        return await this.httpClient.post<RoomResponse>(environment.serverURL + 'rooms', {name}).toPromise();
+    }
+
+    public getMessages(onSuccess: (value: AllMessagesInterface) => void) {
+        if (!this.checkIfRoomIsOpen(true)) {
+            return;
+        }
 
         this.checkIfRoomIsSelected().then((roomResponse) => {
             this.httpClient
@@ -69,13 +81,14 @@ export class RoomService {
         })
     }
 
-    postMessage(msg: string) {
+    public postMessage(msg: string) {
         this.socket.emit('my message', {message: msg, roomId: this.selectedRoom.room.id});
     }
 
-    private checkIfRoomIsOpen(): boolean {
+    private checkIfRoomIsOpen(shouldNaviagetBack: boolean): boolean {
         const isOpen = this.router.url.split('/')[1] === 'room';
-        if (!isOpen) {
+        if (!isOpen && shouldNaviagetBack) {
+            console.error('No room is selected');
             this.router.navigate(['rooms']);
         }
         return isOpen;
@@ -92,5 +105,9 @@ export class RoomService {
         }
 
         return this.selectedRoom;
+    }
+
+    public OpenCreateRoomPage(): void {
+        this.router.navigate(['createRoom']);
     }
 }

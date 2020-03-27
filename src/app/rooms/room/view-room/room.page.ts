@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Platform, IonContent} from '@ionic/angular';
 
-import {RoomService} from '../../services/rooms/room.service';
-import {AllMessagesInterface} from '../../interfaces/room-response';
+import {RoomService} from '../../../services/rooms/room.service';
+import {AllMessagesInterface} from '../../../interfaces/room-response';
 
 @Component({
     selector: 'app-room',

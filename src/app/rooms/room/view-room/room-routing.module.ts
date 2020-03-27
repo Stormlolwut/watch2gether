@@ -1,21 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { RoomsPage } from './rooms.page';
+import { RoomPage } from './room.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: RoomsPage
+    component: RoomPage
   },
   {
-    path: 'room',
-    loadChildren: () => import('./room/view-room/room.module').then(m => m.RoomPageModule)
+    path: 'create-room',
+    loadChildren: () => import('../create-room/create-room.module').then(m => m.CreateRoomPageModule)
   }
+
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class RoomsPageRoutingModule {}
+export class RoomPageRoutingModule {}

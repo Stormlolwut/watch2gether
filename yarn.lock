@@ -992,6 +992,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/toast@^5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/toast/-/toast-5.23.0.tgz#c1814592dff3fa81867bd4572a0556879b737199"
+  integrity sha512-g4CDcLApT2AkvPYAt6WwKxpSa6TOSh5TJBMWKr2vXgZ1SgLRlGsTUz72ZiE2R0cJ0URi9bfS6YOX3JGUCB8HnA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/youtube-video-player@^5.23.0":
   version "5.23.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/youtube-video-player/-/youtube-video-player-5.23.0.tgz#7f3ad92e4179adda17a3effd38d029c64a976767"

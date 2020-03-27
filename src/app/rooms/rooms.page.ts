@@ -32,6 +32,10 @@ export class RoomsPage implements OnInit {
     }
 
     public onCardClick(room: RoomResponse) {
-        this.roomService.OpenRoom(room);
+        this.roomService.OpenRoomPage(room);
+    }
+
+    public addRoomButtonClicked($event: MouseEvent) {
+        this.roomService.OpenCreateRoomPage();
     }
 }
