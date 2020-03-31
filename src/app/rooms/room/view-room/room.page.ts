@@ -3,6 +3,7 @@ import {Platform, IonContent} from '@ionic/angular';
 
 import {RoomService} from '../../../services/rooms/room.service';
 import {AllMessagesInterface} from '../../../interfaces/room-response';
+import {UserService} from '../../../services/user/user.service';
 
 @Component({
     selector: 'app-room',
@@ -19,18 +20,17 @@ export class RoomPage implements OnInit {
 
     constructor(
         private roomService: RoomService,
+        private userService: UserService,
         public plt: Platform
     ) {
         this.messages = new Array<any>();
 
-
         roomService.onMessageReceived.push((message: string) => {
             this.messages.push({
-                username: 'huseyin',
+                username: userService.currentUser.user.name,
                 timestamp: new Date().getTime(),
                 line: message
             });
-
             setTimeout(() => {
                 this.content.scrollToBottom(200);
             });
@@ -53,7 +53,9 @@ export class RoomPage implements OnInit {
         });
     }
 
-    sendMessage() {
+    sendMessage($event: any) {
         this.roomService.postMessage(this.newMsg);
+        this.newMsg = '';
+        $event.preventDefault();
     }
 }

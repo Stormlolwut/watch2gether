@@ -8,10 +8,6 @@ import {Component, OnInit} from '@angular/core';
 export class YoutubePlayerAngularComponent implements OnInit {
   public player: YT.Player;
 
-  constructor() {
-
-  }
-
   ngOnInit() {
     const tag = document.createElement('script');
 

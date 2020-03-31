@@ -1,6 +1,7 @@
 import { RoomPageModule } from './rooms/room/view-room/room.module';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {RoomGuard} from './guards/room.guard';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'room/:id',
-    loadChildren: () => import('./rooms/room/view-room/room.module').then(m => m.RoomPageModule)
+    loadChildren: () => import('./rooms/room/view-room/room.module').then(m => m.RoomPageModule),
+    canActivate: [RoomGuard]
   },
   {
     path: 'createRoom',
@@ -33,6 +35,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [RoomGuard]
 })
 export class AppRoutingModule { }

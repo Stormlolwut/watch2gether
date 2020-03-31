@@ -48,13 +48,13 @@
                         <ion-col size="12" align-self-end *ngIf="plt.is('desktop')">
                             <ion-row color="light" class="ion-align-items-center">
                                 <ion-col size="10">
-                                    <textarea autosize maxRows="5" [(ngModel)]="newMsg"
+                                    <textarea autosize maxRows="5" [(ngModel)]="newMsg" (keydown.enter)="sendMessage($event)"
                                               class="message-input"></textarea>
                                 </ion-col>
                                 <ion-col size="2">
                                     <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg === ''"
                                                 class="msg-btn"
-                                                (click)="sendMessage()">
+                                                (click)="sendMessage($event)">
                                         <ion-icon slot="icon-only" name="send-outline"></ion-icon>
                                     </ion-button>
                                 </ion-col>

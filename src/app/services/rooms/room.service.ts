@@ -7,6 +7,7 @@ import {Injectable} from '@angular/core';
 import {RoomResponse} from 'src/app/interfaces/room-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as io from 'socket.io-client';
+import {element} from 'protractor';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class RoomService {
 
     public GetRooms(success: (response: RoomsResponse) => void): void {
         this.httpClient
-            .get<RoomsResponse>(environment.serverURL + 'rooms', {})
+            .get<RoomsResponse>(environment.serverURL + '/rooms', {})
             .subscribe(value => {
                 success(value);
             });
@@ -37,15 +38,21 @@ export class RoomService {
 
         if (this.checkIfRoomIsOpen(false)) {
             this.checkIfRoomIsSelected().then((roomResponse: RoomResponse) => {
+                this.selectedRoom = roomResponse;
                 userService.getToken().then(token => {
-                    if (token !== undefined && token !== null && token.length > 0) {
-                        this.socket = io(environment.serverURL + 'chat', {query: {token}});
+                    if (!token && token.length > 0) {
+                        this.socket = io(environment.serverURL + '/chat', {query: {token}});
                         this.socket.emit('join room', {roomId: roomResponse.room.id});
 
-                        // tslint:disable-next-line:only-arrow-functions
-                        this.socket.on('big-announcement', function(room) {
-                            console.log(room);
+                        this.socket.on('joined room', (data) => {
+                            console.log(data);
                         });
+
+                        this.socket.on('received message', (data) => {
+                            this.onMessageReceived.forEach(value => {
+                                value(data.message);
+                            })
+                        })
                     }
                 })
             })
@@ -58,7 +65,7 @@ export class RoomService {
     }
 
     public async CreateRoom(name: string): Promise<RoomResponse> {
-        return await this.httpClient.post<RoomResponse>(environment.serverURL + 'rooms', {name}).toPromise();
+        return await this.httpClient.post<RoomResponse>(environment.serverURL + '/rooms', {name}).toPromise();
     }
 
     public getMessages(onSuccess: (value: AllMessagesInterface) => void) {
@@ -70,7 +77,7 @@ export class RoomService {
             this.httpClient
                 .get<AllMessagesInterface>(
                     environment.serverURL +
-                    'rooms/' +
+                    '/rooms/' +
                     roomResponse.room.id +
                     '/messages',
                     {}
@@ -82,8 +89,7 @@ export class RoomService {
     }
 
     public postMessage(msg: string) {
-        this.socket.emit('my message', {roomId: 'a_room_2', msg: 'WAUW'});
-        // this.socket.emit('my message', {message: msg, roomId: this.selectedRoom.room.id});
+        this.socket.emit('send message', {roomId: this.selectedRoom.room.id, msg});
     }
 
     private checkIfRoomIsOpen(shouldNaviagetBack: boolean): boolean {
@@ -100,7 +106,7 @@ export class RoomService {
         const roomUrl = this.router.url.split('/');
         if (!this.selectedRoom) {
             return await this.httpClient.get<RoomResponse>(
-                environment.serverURL + 'rooms/' + roomUrl[2],
+                environment.serverURL + '/rooms/' + roomUrl[2],
                 {}
             ).toPromise();
         }
