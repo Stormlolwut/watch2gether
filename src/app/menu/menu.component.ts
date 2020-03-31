@@ -24,11 +24,11 @@ export class MenuComponent implements OnInit {
       url: '/rooms',
       icon: 'images'
     },
-    {
-      title: 'Profile',
-      url: '/profile',
-      icon: 'person'
-    }
+    // {
+    //   title: 'Profile',
+    //   url: '/profile',
+    //   icon: 'person'
+    // }
   ];
 
   constructor(

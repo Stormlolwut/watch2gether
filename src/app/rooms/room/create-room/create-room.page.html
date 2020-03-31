@@ -1,6 +1,14 @@
-<ion-header>
+<ion-header [translucent]="true">
     <ion-toolbar color="primary">
-        <ion-title>CreateRoom</ion-title>
+
+        <ion-buttons slot="start" *ngIf="platform.is('desktop')">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="rooms"></ion-back-button>
+        </ion-buttons>
+        <ion-title slot>CreateRoom</ion-title>
     </ion-toolbar>
 </ion-header>
 

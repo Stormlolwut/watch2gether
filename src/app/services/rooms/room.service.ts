@@ -33,30 +33,6 @@ export class RoomService {
         private userService: UserService,
     ) {
         this.onMessageReceived = new Array<(message: string) => void>();
-        this.selectedRoom = null;
-
-
-        if (this.checkIfRoomIsOpen(false)) {
-            this.checkIfRoomIsSelected().then((roomResponse: RoomResponse) => {
-                this.selectedRoom = roomResponse;
-                userService.getToken().then(token => {
-                    if (!token && token.length > 0) {
-                        this.socket = io(environment.serverURL + '/chat', {query: {token}});
-                        this.socket.emit('join room', {roomId: roomResponse.room.id});
-
-                        this.socket.on('joined room', (data) => {
-                            console.log(data);
-                        });
-
-                        this.socket.on('received message', (data) => {
-                            this.onMessageReceived.forEach(value => {
-                                value(data.message);
-                            })
-                        })
-                    }
-                })
-            })
-        }
     }
 
     public OpenRoomPage(response: RoomResponse) {
@@ -69,11 +45,7 @@ export class RoomService {
     }
 
     public getMessages(onSuccess: (value: AllMessagesInterface) => void) {
-        if (!this.checkIfRoomIsOpen(true)) {
-            return;
-        }
-
-        this.checkIfRoomIsSelected().then((roomResponse) => {
+        this.getRoom(this.selectedRoom.room.id).then((roomResponse) => {
             this.httpClient
                 .get<AllMessagesInterface>(
                     environment.serverURL +
@@ -92,21 +64,11 @@ export class RoomService {
         this.socket.emit('send message', {roomId: this.selectedRoom.room.id, msg});
     }
 
-    private checkIfRoomIsOpen(shouldNaviagetBack: boolean): boolean {
-        const isOpen = this.router.url.split('/')[1] === 'room';
-        if (!isOpen && shouldNaviagetBack) {
-            console.error('No room is selected');
-            this.router.navigate(['rooms']);
-        }
-        return isOpen;
-    }
-
-    private async checkIfRoomIsSelected(): Promise<RoomResponse> {
+    public async getRoom(roomId: string): Promise<RoomResponse> {
         // If current page is room but the selected room is null.
-        const roomUrl = this.router.url.split('/');
         if (!this.selectedRoom) {
             return await this.httpClient.get<RoomResponse>(
-                environment.serverURL + '/rooms/' + roomUrl[2],
+                `${environment.serverURL}/rooms/` + roomId,
                 {}
             ).toPromise();
         }
@@ -114,7 +76,33 @@ export class RoomService {
         return this.selectedRoom;
     }
 
+    public async setUser(roomId: string): Promise<RoomResponse> {
+        return await this.httpClient
+            .post<RoomResponse>(`${environment.serverURL}/rooms/` + roomId + '/users',
+                {user: this.userService.currentUser.user.id}).toPromise()
+    }
+
     public OpenCreateRoomPage(): void {
         this.router.navigate(['createRoom']);
+    }
+
+    public async OpenSocket() {
+        const token = await this.userService.getToken();
+
+        if (token && token.length > 0) {
+            this.socket = io(environment.serverURL + '/chat', {query: {token}});
+            this.socket.emit('join room', {roomId: this.selectedRoom.room.id});
+
+            this.socket.on('joined room', (data) => {
+                console.log(data);
+            });
+
+            this.socket.on('received message', (data) => {
+                console.log(data);
+                this.onMessageReceived.forEach(value => {
+                    value(data.message);
+                })
+            })
+        }
     }
 }

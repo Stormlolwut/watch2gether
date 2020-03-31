@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RoomService} from '../../../services/rooms/room.service';
-import {ToastController} from '@ionic/angular';
+import {Platform, ToastController} from '@ionic/angular';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 
@@ -13,7 +13,8 @@ export class CreateRoomPage implements OnInit {
     private roomName: FormControl;
     public roomForm: FormGroup;
 
-    constructor(private roomService: RoomService, private toastController: ToastController, private formBuilder: FormBuilder) {
+    constructor(private roomService: RoomService, private toastController: ToastController, private formBuilder: FormBuilder,
+                public platform: Platform) {
         this.roomForm = formBuilder.group({
             roomName: ['', Validators.required],
         });
