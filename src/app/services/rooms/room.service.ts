@@ -7,7 +7,6 @@ import {Injectable} from '@angular/core';
 import {RoomResponse} from 'src/app/interfaces/room-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as io from 'socket.io-client';
-import {element} from 'protractor';
 
 @Injectable({
     providedIn: 'root'

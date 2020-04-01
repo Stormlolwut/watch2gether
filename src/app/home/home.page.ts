@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  public canShowLogoutButton: boolean = false;
+  public canShowLogoutButton = false;
 
   constructor(private userService: UserService) {
     userService.UserHasLoggedIn().then((value) => {

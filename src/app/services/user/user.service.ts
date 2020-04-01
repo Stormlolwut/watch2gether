@@ -12,7 +12,6 @@ export class UserService {
 
     constructor(private httpClient: HttpClient, private storage: Storage) {
         this.OnUserInfoReceived = new Array<(userInfo: AuthResponse) => void>();
-        this.getUserInformation();
     }
 
     private readonly ACCESSTOKEN: string = 'ACCESS_TOKEN';
@@ -34,7 +33,7 @@ export class UserService {
         return this.storage.get(this.ACCESSTOKEN);
     }
 
-    private getUserInformation() {
+    public getUserInformation() {
         this.httpClient.get<AuthResponse>(environment.serverURL, {}).subscribe((value) => {
                 this.currentUser = value;
                 this.OnUserInfoReceived?.forEach(element => {

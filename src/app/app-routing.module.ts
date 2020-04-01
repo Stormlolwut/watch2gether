@@ -2,6 +2,7 @@ import { RoomPageModule } from './rooms/room/view-room/room.module';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {RoomGuard} from './guards/room.guard';
+import {UserGuard} from './guards/user-guard.service';
 
 
 const routes: Routes = [
@@ -15,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'rooms',
-    loadChildren: () => import('./rooms/rooms.module').then(m => m.RoomsPageModule)
+    loadChildren: () => import('./rooms/rooms.module').then(m => m.RoomsPageModule),
+    canActivate: [UserGuard]
   },
   {
     path: 'room',
@@ -28,7 +30,8 @@ const routes: Routes = [
   },
   {
     path: 'createRoom',
-    loadChildren: () => import('./rooms/room/create-room/create-room.module').then(m => m.CreateRoomPageModule)
+    loadChildren: () => import('./rooms/room/create-room/create-room.module').then(m => m.CreateRoomPageModule),
+    canActivate: [UserGuard]
   }
 ];
 @NgModule({
@@ -36,6 +39,6 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule],
-  providers: [RoomGuard]
+  providers: [RoomGuard, UserGuard]
 })
 export class AppRoutingModule { }
