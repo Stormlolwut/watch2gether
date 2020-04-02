@@ -15,9 +15,6 @@ export class RoomVideoComponent implements OnInit {
         setTimeout(() => {
             this.content.scrollToBottom(200);
         }, 1000);
-
-        console.log(roomService.messages);
-        console.log(userService.currentUser.user.name);
     }
 
     ngOnInit() {
