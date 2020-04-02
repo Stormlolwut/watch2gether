@@ -1,97 +1,35 @@
 <ion-header [translucent]="true">
     <ion-toolbar color="primary">
-        <ion-buttons slot="start" >
+        <ion-buttons slot="start">
             <ion-menu-button *ngIf="plt.is('desktop'); else phone"></ion-menu-button>
             <ng-template #phone>
                 <ion-back-button defaultHref="/rooms"></ion-back-button>
             </ng-template>
         </ion-buttons>
         <ion-title>room</ion-title>
-        <ion-buttons slot="primary">
-            <ion-button color="danger" [routerLink]="['/login']">
-                Logout
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 
 <ion-content style="height: 100%">
-    <ion-grid style="height: 100%">
-        <ion-row style="height: 100%;">
-            <ion-col style="background: red">
-                <app-youtube-player-angular></app-youtube-player-angular>
-            </ion-col>
-        </ion-row>
-
-        <ion-row style="height: 100%">
-            <ion-col style="height: 100%">
-                <ion-grid style="height: 100%">
-                    <ion-row style="height: 80%">
-                        <ion-col style="max-height: 100%">
-                            <ion-content style="max-height: 100%; overflow-y: auto;" #content>
-                                <ion-row align-items-center text-center>
-                                    <ion-col size="12">
-                                        <ion-grid style="max-height: 100%;">
-                                            <ion-row *ngFor="let message of messages">
-                                                <ion-col size="9" *ngIf="currentUser !== message.username"
-                                                         class="message other-message">
-                                                    <b>{{ message.username }}</b><br>
-                                                    <span> {{ message.line }} </span>
-                                                    <div class="time ion-text-right"><br>
-                                                        {{ message.timestamp | date:'short' }}
-                                                    </div>
-                                                </ion-col>
-
-                                                <ion-col size="9" offset="3" *ngIf="currentUser === message.username"
-                                                         class="message my-message">
-                                                    <b>{{ message.username }}</b><br>
-                                                    <span> {{ message.line }} </span>
-                                                    <div class="time ion-text-right"><br>
-                                                        {{ message.timestamp | date:'short' }}
-                                                    </div>
-                                                </ion-col>
-                                            </ion-row>
-                                        </ion-grid>
-                                    </ion-col>
-                                </ion-row>
-                            </ion-content>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="12" align-self-end>
-                            <ion-row color="light" class="ion-align-items-center">
-                                <ion-col size="10">
-                                    <textarea autosize maxRows="5" [(ngModel)]="newMsg" (keydown.enter)="sendMessage($event)"
-                                              class="message-input"></textarea>
-                                </ion-col>
-                                <ion-col size="2">
-                                    <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg === ''"
-                                                class="msg-btn"
-                                                (click)="sendMessage($event)">
-                                        <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-                                    </ion-button>
-                                </ion-col>
-                            </ion-row>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <app-room-video [hidden]="currentRoomState !== roomStates.Room"></app-room-video>
+    <app-room-video-list [hidden]="currentRoomState !== roomStates.Videos"></app-room-video-list>
+    <app-room-users [hidden]="currentRoomState !== roomStates.Users"></app-room-users>
 </ion-content>
 
-<!-- // TODO: mobile only -->
-<!-- <ion-toolbar color="light" *ngIf="plt.is('mobile')">
-    <ion-row class="ion-align-items-center">
-      <ion-col size="10">
-        <textarea autosize maxRows="5" [(ngModel)]="newMsg" class="message-input"></textarea>
-      </ion-col>
-      <ion-col size="2">
-        <ion-button expand="block" fill="clear" color="primary" [disabled]="newMsg === ''" class="msg-btn"
-          (click)="sendMessage()">
-          <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar> -->
+<ion-tab-bar slot="bottom">
+    <ion-tab-button tab="room" (click)="activateRoom()">
+        <ion-icon name="cube-outline"></ion-icon>
+        <ion-label>Room</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="videos" (click)="activateVideos()">
+        <ion-icon name="play-outline"></ion-icon>
+        <ion-label>Videos</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="users" (click)="activateUsers()">
+        <ion-icon name="person-circle"></ion-icon>
+        <ion-label>Users</ion-label>
+    </ion-tab-button>
+</ion-tab-bar>

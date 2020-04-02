@@ -18,7 +18,8 @@ export interface RoomResponse {
 }
 
 export interface MessageInterface {
-    user: UserResponseInterface,
+    _id: string,
+    sender: UserResponseInterface,
     line: string,
     timestamp: Date,
 }

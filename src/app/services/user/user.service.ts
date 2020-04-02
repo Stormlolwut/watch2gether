@@ -18,7 +18,7 @@ export class UserService {
 
     public currentUser: AuthResponse;
 
-    public OnUserInfoReceived: Array<(userInfo: AuthResponse) => void>
+    public OnUserInfoReceived: Array<(userInfo: AuthResponse) => void>;
 
     private httpOptions = {
         headers: new HttpHeaders({

@@ -1,0 +1,38 @@
+.message {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+}
+
+.other-message {
+  background: var(--ion-color-tertiary);
+  color: #fff;
+}
+
+.my-message {
+  background: var(--ion-color-secondary);
+  color: #fff;
+}
+
+.time {
+  color: #dfdfdf;
+  float: right;
+  font-size: small;
+}
+
+.msg-btn {
+  --padding-start: 0.5em;
+  --padding-end: 0.5em;
+}
+
+.chat {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  right: 0;
+}
+
+.signup-col {
+  position: 0 !important;
+}

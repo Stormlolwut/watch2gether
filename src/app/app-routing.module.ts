@@ -1,8 +1,8 @@
-import { RoomPageModule } from './rooms/room/view-room/room.module';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {RoomGuard} from './guards/room.guard';
 import {UserGuard} from './guards/user-guard.service';
+import {CanDeactivateRoomGuard} from './guards/can-deactivate-room.guard';
 
 
 const routes: Routes = [
@@ -26,7 +26,8 @@ const routes: Routes = [
   {
     path: 'room/:id',
     loadChildren: () => import('./rooms/room/view-room/room.module').then(m => m.RoomPageModule),
-    canActivate: [RoomGuard]
+    canActivate: [UserGuard, RoomGuard],
+    canDeactivate: [CanDeactivateRoomGuard],
   },
   {
     path: 'createRoom',
@@ -39,6 +40,6 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule],
-  providers: [RoomGuard, UserGuard]
+  providers: [RoomGuard, UserGuard, CanDeactivateRoomGuard]
 })
 export class AppRoutingModule { }

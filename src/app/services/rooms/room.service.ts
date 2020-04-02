@@ -12,10 +12,14 @@ import * as io from 'socket.io-client';
     providedIn: 'root'
 })
 export class RoomService {
+    public newMsg = '';
+    public messages: Array<any>;
+
     public selectedRoom: RoomResponse;
     private socket;
 
-    public onMessageReceived: Array<(message: string) => void>;
+    public onMessageReceived: Array<(userName: string, message: string) => void>;
+    public onMessagesLoaded;
 
     public GetRooms(success: (response: RoomsResponse) => void): void {
         this.httpClient
@@ -31,6 +35,7 @@ export class RoomService {
         private activateRoute: ActivatedRoute,
         private userService: UserService,
     ) {
+        this.messages = new Array<any>();
         this.onMessageReceived = new Array<(message: string) => void>();
     }
 
@@ -43,36 +48,24 @@ export class RoomService {
         return await this.httpClient.post<RoomResponse>(environment.serverURL + '/rooms', {name}).toPromise();
     }
 
-    public getMessages(onSuccess: (value: AllMessagesInterface) => void) {
-        this.getRoom(this.selectedRoom.room.id).then((roomResponse) => {
-            this.httpClient
-                .get<AllMessagesInterface>(
-                    environment.serverURL +
-                    '/rooms/' +
-                    roomResponse.room.id +
-                    '/messages',
-                    {}
-                )
-                .subscribe(value => {
-                    onSuccess(value);
-                });
-        })
+    public async getMessages() {
+        const url = `${environment.serverURL}/rooms/${this.selectedRoom.room.id}/messages`;
+
+        await this.httpClient.get<AllMessagesInterface>(url).toPromise().then((value) => {
+            this.messages = value.messages;
+        });
+
     }
 
     public postMessage(msg: string) {
-        this.socket.emit('send message', {roomId: this.selectedRoom.room.id, msg});
+        this.socket.emit('send message', {name: this.userService.currentUser.user.name, roomId: this.selectedRoom.room.id, msg});
     }
 
     public async getRoom(roomId: string): Promise<RoomResponse> {
-        // If current page is room but the selected room is null.
-        if (!this.selectedRoom) {
-            return await this.httpClient.get<RoomResponse>(
-                `${environment.serverURL}/rooms/` + roomId,
-                {}
-            ).toPromise();
-        }
-
-        return this.selectedRoom;
+        return await this.httpClient.get<RoomResponse>(
+            `${environment.serverURL}/rooms/` + roomId,
+            {}
+        ).toPromise();
     }
 
     public async setUser(roomId: string): Promise<RoomResponse> {
@@ -89,7 +82,7 @@ export class RoomService {
         const token = await this.userService.getToken();
 
         if (token && token.length > 0) {
-            this.socket = io(environment.serverURL + '/chat', {query: {token}});
+            this.socket = io(environment.serverURL + '/chat', {forceNew: true, query: {token}});
             this.socket.emit('join room', {roomId: this.selectedRoom.room.id});
 
             this.socket.on('joined room', (data) => {
@@ -97,9 +90,14 @@ export class RoomService {
             });
 
             this.socket.on('received message', (data) => {
-                console.log(data);
+                this.messages.push({
+                    sender: { name: data.userId },
+                    timestamp: new Date().getTime(),
+                    line: data.message
+                });
+
                 this.onMessageReceived.forEach(value => {
-                    value(data.message);
+                    value(data.userId, data.message);
                 })
             })
         }

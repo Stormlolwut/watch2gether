@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: RoomPage
   },
-  {
-    path: 'create-room',
-    loadChildren: () => import('../create-room/create-room.module').then(m => m.CreateRoomPageModule)
-  }
 
 ];
 
