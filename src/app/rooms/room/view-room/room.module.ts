@@ -12,7 +12,7 @@ import {RoomUsersComponent} from './room-users/room-users.component';
     imports: [
         RoomPageRoutingModule,
         SharedModule,
-        YouTubePlayerModule
+        YouTubePlayerModule,
     ],
     declarations: [RoomPage, YoutubePlayerAngularComponent, RoomVideoComponent, RoomVideoListComponent, RoomUsersComponent],
 })

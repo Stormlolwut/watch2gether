@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
     HttpRequest,
     HttpHandler,
@@ -7,12 +7,12 @@ import {
     HttpResponse,
     HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, throwError, from } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import {Observable, throwError, from} from 'rxjs';
+import {map, catchError, switchMap} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {Storage} from '@ionic/storage';
 
-import { ToastController } from '@ionic/angular';
+import {ToastController} from '@ionic/angular';
 
 
 @Injectable()
@@ -23,16 +23,18 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (request.url.startsWith('https://noembed.com/')) {
+            return next.handle(request);
+        }
 
         return from(this.storage.get('ACCESS_TOKEN'))
             .pipe(
                 switchMap(token => {
-                    if (token) {
-                        request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
-                    }
+                    request = request.clone({headers: request.headers.set('Authorization', 'Bearer ' + token)});
+
 
                     if (!request.headers.has('Content-Type')) {
-                        request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
+                        request = request.clone({headers: request.headers.set('Content-Type', 'application/json')});
                     }
 
                     return next.handle(request).pipe(
@@ -44,8 +46,7 @@ export class TokenInterceptor implements HttpInterceptor {
                         }),
                         catchError((error: HttpErrorResponse) => {
                             this.router.navigate(['login']);
-                            this.presentAlert(error.status, error.message);
-
+                            this.presentAlert(error.status, error.error);
                             return throwError(error);
                         })
                     );
@@ -53,14 +54,14 @@ export class TokenInterceptor implements HttpInterceptor {
             );
     }
 
-  async presentAlert(status, reason) {
-    const alert = await this.toastController.create({
-        header: status + ' Error',
-        message: reason,
-        buttons: ['OK'],
-        duration: 2000
-    });
+    async presentAlert(status, reason) {
+        const alert = await this.toastController.create({
+            header: status + ' Error',
+            message: reason,
+            buttons: ['OK'],
+            duration: 2000
+        });
 
-    await alert.present();
-}
+        await alert.present();
+    }
 }

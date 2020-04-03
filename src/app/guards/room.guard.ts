@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {RoomService} from '../services/rooms/room.service';
-import {UserService} from '../services/user/user.service';
+import {RoomSocketService} from '../services/rooms/room-socket.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoomGuard implements CanActivate {
 
-    constructor(private roomService: RoomService, private userService: UserService) {
+    constructor(private roomService: RoomService, private roomSocket: RoomSocketService) {
 
     }
 
@@ -22,8 +22,9 @@ export class RoomGuard implements CanActivate {
 
         this.roomService.selectedRoom = roomResponse;
 
+        this.roomService.setLinksOfRoom();
         await this.roomService.getMessages();
-        await this.roomService.OpenSocket();
+        await this.roomSocket.OpenSocket();
         return true;
 
         // TODO: Password.

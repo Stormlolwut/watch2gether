@@ -12,9 +12,16 @@ export interface RoomResponse {
             enabled: boolean,
             [userId: number]: string
         },
+        queue: Array<QueueInterface>,
         messages: Array<MessageInterface>,
         videos: Array<VideosInterface>
     }
+}
+
+export interface QueueInterface {
+    link: string,
+    timestamp: Date,
+    position: number,
 }
 
 export interface MessageInterface {

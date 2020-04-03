@@ -1,7 +1,5 @@
-import { MenuController } from '@ionic/angular';
-import { AuthResponse } from './../interfaces/auth-response';
-import { Router } from '@angular/router';
-import { UserService } from './../services/user/user.service';
+import { AuthResponse } from '../interfaces/auth-response';
+import { UserService } from '../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -40,7 +38,7 @@ export class MenuComponent implements OnInit {
   }
 
   onUserInformationReceived(userInfo: AuthResponse) {
-    this.username = userInfo.user.name;
+    this.username = userInfo.user.id;
   }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import {MessageInterface} from './room-response';
+import {MessageInterface, QueueInterface} from './room-response';
 
 export interface RoomsResponse {
     rooms: [{
@@ -12,6 +12,7 @@ export interface RoomsResponse {
             enabled: boolean,
             [userId: number]: string
         },
+        queue: Array<QueueInterface>
         messages: Array<MessageInterface>,
         videos: Array<VideosInterface>
     }]

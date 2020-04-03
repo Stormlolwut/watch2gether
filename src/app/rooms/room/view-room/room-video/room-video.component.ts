@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {RoomService} from '../../../../services/rooms/room.service';
 import {UserService} from '../../../../services/user/user.service';
 import {IonContent} from '@ionic/angular';
+import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
 
 @Component({
     selector: 'app-room-video',
@@ -11,24 +12,25 @@ import {IonContent} from '@ionic/angular';
 export class RoomVideoComponent implements OnInit {
     @ViewChild('content') private content: IonContent;
 
-    constructor(public roomService: RoomService, public userService: UserService) {
+    constructor(public roomService: RoomService,
+                public userService: UserService,
+                private roomSocket: RoomSocketService) {
         setTimeout(() => {
             this.content.scrollToBottom(200);
         }, 1000);
     }
 
     ngOnInit() {
-        this.roomService.onMessageReceived.push((userName: string, message: string) => {
+        this.roomSocket.onMessageReceived.push((userName: string, message: string) => {
             setTimeout(() => {
                 this.content.scrollToBottom(200);
             });
         });
-
     }
 
 
     sendMessage($event: any) {
-        this.roomService.postMessage(this.roomService.newMsg);
+        this.roomSocket.postMessage(this.roomService.newMsg);
         this.roomService.newMsg = '';
         $event.preventDefault();
     }

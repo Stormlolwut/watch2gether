@@ -8,7 +8,7 @@ export interface UserResponseInterface {
     role: string,
     extra: [any],
     providers: [any],
-    id: number,
+    id: string,
     name: string,
     email: string,
     token: string,

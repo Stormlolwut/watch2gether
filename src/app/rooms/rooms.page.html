@@ -23,7 +23,7 @@
       <ion-col style="height: 100%">
         <ion-content>
           <ion-virtual-scroll [items]="items" approxItemHeight="320px">
-            <ion-card class="list-card" *virtualItem="let item; let itemBounds = bounds;" (click)="onCardClick(item)">
+            <ion-card class="list-card" *virtualItem="let item" (click)="onCardClick(item)">
               <ion-card-header>
                 <ion-card-title>{{ item.room.name }}</ion-card-title>
               </ion-card-header>
