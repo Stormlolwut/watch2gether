@@ -13,10 +13,18 @@ export class RoomSocketService {
 
     public onMessageReceived: Array<(userName: string, message: string) => void>;
     public onLinkReceived: Array<(link: string, play: boolean) => void>;
+    public onRoomJoined: Array<() => void>;
+    public onVideoPaused: Array<(pausedAt: number) => void>;
+    public onVideoResumed: Array<() => void>;
+    public onTimeRequested: Array<() => void>;
 
     constructor(private userService: UserService) {
         this.onLinkReceived = new Array<(link: string, play: boolean) => void>();
         this.onMessageReceived = new Array<(message: string) => void>();
+        this.onVideoPaused = new Array<(pausedAt: number) => void>()
+        this.onVideoResumed = new Array<() => void>();
+        this.onRoomJoined = new Array<() => void>();
+        this.onTimeRequested = new Array<() => void>();
     }
 
     public async OpenSocket() {
@@ -27,7 +35,10 @@ export class RoomSocketService {
             this.socket.emit('join room', {roomId: this.roomService.selectedRoom.room.id});
 
             this.socket.on('joined room', (data) => {
-                console.log(data);
+                console.log('hello people');
+                this.onRoomJoined.forEach(value => {
+                    value();
+                })
             });
 
             this.socket.on('received message', (data) => {
@@ -52,6 +63,23 @@ export class RoomSocketService {
                 this.roomService.updateQueue(data.from, data.to);
             });
 
+            this.socket.on('pause video', (data) => {
+                this.onVideoPaused.forEach(value => {
+                    value(data.pausedAt);
+                })
+            });
+
+            this.socket.on('resume video', (data) => {
+                this.onVideoResumed.forEach(value => {
+                    value();
+                })
+            })
+
+            this.socket.on('request time', () => {
+                this.onTimeRequested.forEach(value => {
+                    value();
+                })
+            })
         }
     }
 
@@ -69,5 +97,13 @@ export class RoomSocketService {
 
     updateQueue(from: number, to: number) {
         this.socket.emit('update queue', {from, to});
+    }
+
+    videoPausedAt(currentTime: number) {
+        this.socket.emit('video paused', {pausedAt: currentTime});
+    }
+
+    public videoResume(currentTime: number) {
+        this.socket.emit('video resume');
     }
 }

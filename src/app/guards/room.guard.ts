@@ -23,6 +23,7 @@ export class RoomGuard implements CanActivate {
         this.roomService.selectedRoom = roomResponse;
 
         this.roomService.setLinksOfRoom();
+
         await this.roomService.getMessages();
         await this.roomSocket.OpenSocket();
         return true;

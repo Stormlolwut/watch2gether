@@ -40,7 +40,7 @@ export class RoomService {
         this.roomSocket.roomService = this;
 
         roomSocket.onMessageReceived.push(this.OnMessageReceived);
-        roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play))
+        roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
     public OpenRoomPage(response: RoomResponse) {
