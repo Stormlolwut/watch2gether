@@ -59,13 +59,15 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onResumeVideo(timestamp: number) {
-        if (timestamp) {
-            setTimeout(() => {
-                this.player.seekTo(timestamp + 4, true)
+        if (this.player) {
+            if (timestamp) {
+                setTimeout(() => {
+                    this.player.seekTo(timestamp + 4, true)
+                    this.player.playVideo();
+                }, 4000);
+            } else {
                 this.player.playVideo();
-            }, 4000);
-        } else {
-            this.player.playVideo();
+            }
         }
     }
 
@@ -83,6 +85,9 @@ export class YoutubePlayerAngularComponent implements OnInit {
         setTimeout(() => {
             if (this.roomService.links.length > 0) {
                 this.onPlayVideo(this.roomService.links[0].link);
+                setTimeout(() => {
+                    this.player.playVideo();
+                }, 1000)
             }
         }, 1000);
     }

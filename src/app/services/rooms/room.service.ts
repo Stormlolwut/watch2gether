@@ -39,7 +39,7 @@ export class RoomService {
         this.onPlayVideo = new Array<(link: string) => void>();
         this.roomSocket.roomService = this;
 
-        roomSocket.onMessageReceived.push(this.OnMessageReceived);
+        roomSocket.onMessageReceived.push((username, message) => {this.OnMessageReceived(username, message)});
         roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
