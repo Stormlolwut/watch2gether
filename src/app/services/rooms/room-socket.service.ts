@@ -16,6 +16,7 @@ export class RoomSocketService {
     public onRoomJoined: Array<() => void>;
     public onVideoPaused: Array<(pausedAt: number) => void>;
     public onVideoResumed: Array<(timestamp: number) => void>;
+    public onNextVideo: Array<() => void>;
     public onTimestampRequested: Array<() => void>;
 
     constructor(private userService: UserService) {
@@ -24,6 +25,7 @@ export class RoomSocketService {
         this.onVideoPaused = new Array<(pausedAt: number) => void>()
         this.onVideoResumed = new Array<(timestamp: number) => void>();
         this.onRoomJoined = new Array<() => void>();
+        this.onNextVideo = new Array<() => void>();
         this.onTimestampRequested = new Array<() => void>();
     }
 
@@ -71,13 +73,9 @@ export class RoomSocketService {
 
             this.socket.on('resume video', (data) => {
                 this.onVideoResumed.forEach(value => {
-                    console.log(data);
-                    if(data)
-                    {
+                    if (data) {
                         value(data.timestamp);
-                    }
-                    else
-                    {
+                    } else {
                         value(undefined);
                     }
                 })
@@ -85,6 +83,13 @@ export class RoomSocketService {
 
             this.socket.on('requestCurTimestamp', () => {
                 this.onTimestampRequested.forEach(value => {
+                    value();
+                })
+            });
+
+            this.socket.on('nextVideo', () => {
+                this.roomService.nextVideo();
+                this.onNextVideo.forEach(value => {
                     value();
                 })
             })
@@ -121,5 +126,9 @@ export class RoomSocketService {
 
     public sendCurrentTimestamp(timestamp: number) {
         this.socket.emit('sendCurTimestamp', {timestamp});
+    }
+
+    public nextVideo() {
+        this.socket.emit('nextVideo');
     }
 }

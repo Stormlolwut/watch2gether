@@ -120,4 +120,8 @@ export class RoomService {
         this.links[to] = temp;
         console.log(this.links)
     }
+
+    public nextVideo() {
+        this.links.shift();
+    }
 }

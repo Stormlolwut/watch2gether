@@ -14,6 +14,7 @@ export class YoutubePlayerAngularComponent implements OnInit {
         roomSocket.onVideoResumed.push((time) => this.onResumeVideo(time));
         roomSocket.onRoomJoined.push(() => this.onRoomJoined());
         roomSocket.onTimestampRequested.push(() => this.onTimeStampRequested());
+        roomSocket.onNextVideo.push(() => this.onNextVideo());
     }
 
     public player: YT.Player;
@@ -31,10 +32,8 @@ export class YoutubePlayerAngularComponent implements OnInit {
         this.player = event.target;
         this.player.addEventListener('onStateChange', (data: YT.OnStateChangeEvent) => {
             if (data.data === YT.PlayerState.PAUSED) {
-                console.log('Paused');
                 this.roomSocket.videoPausedAt(data.target.getCurrentTime());
             } else if (data.data === YT.PlayerState.PLAYING) {
-                console.log('Playing');
                 this.roomSocket.videoResume(data.target.getCurrentTime());
             }
         });
@@ -65,8 +64,7 @@ export class YoutubePlayerAngularComponent implements OnInit {
                 this.player.seekTo(timestamp + 4, true)
                 this.player.playVideo();
             }, 4000);
-        }
-        else {
+        } else {
             this.player.playVideo();
         }
     }
@@ -76,9 +74,16 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onTimeStampRequested() {
-        if(this.player)
-        {
+        if (this.player) {
             this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
         }
+    }
+
+    private onNextVideo() {
+        setTimeout(() => {
+            if (this.roomService.links.length > 0) {
+                this.onPlayVideo(this.roomService.links[0].link);
+            }
+        }, 1000);
     }
 }
