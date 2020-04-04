@@ -55,7 +55,7 @@ export class RoomService {
     }
 
     public async getMessages() {
-        const url = `${environment.serverURL}/rooms/${this.selectedRoom.room.id}/messages`;
+        const url = `${environment.serverURL}/rooms/${this.selectedRoom.id}/messages`;
 
         await this.httpClient.get<AllMessagesInterface>(url).toPromise().then((value) => {
             this.messages = value.messages;
@@ -89,8 +89,8 @@ export class RoomService {
     }
 
     public setLinksOfRoom() {
-        this.links = new Array<{ link: string, title: string }>(this.selectedRoom.room.queue.length);
-        this.selectedRoom.room.queue.forEach((value, index) => {
+        this.links = new Array<{ link: string, title: string }>(this.selectedRoom.queue.length);
+        this.selectedRoom.queue.forEach((value, index) => {
             this.links[index] = {link: 'loading', title: 'loading'};
             this.httpClient.get<any>(`https://noembed.com/embed?url=${value.link}`)
                 .subscribe((json) => {
