@@ -14,19 +14,11 @@ import {RoomSocketService} from './room-socket.service';
 export class RoomService {
     public newMsg = '';
     public messages: Array<any>;
+    public rooms: Array<any>;
     public links: { link: string, title: string }[] = [];
 
     public selectedRoom: RoomResponse;
     public onPlayVideo: Array<(link: string) => void>;
-
-
-    public GetRooms(success: (response: RoomsResponse) => void): void {
-        this.httpClient
-            .get<RoomsResponse>(environment.serverURL + '/rooms', {})
-            .subscribe(value => {
-                success(value);
-            });
-    }
 
     constructor(
         private httpClient: HttpClient,
@@ -43,14 +35,23 @@ export class RoomService {
         roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
-    public OpenRoomPage(response: RoomResponse) {
-        this.selectedRoom = response;
-
-        this.router.navigate(['/room', response.room.id]);
+    public async getRooms(page: number) {
+            console.log(page);
+         await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`, {}).toPromise().then((value) => {
+             this.rooms = value.rooms;
+         });
     }
 
-    public async CreateRoom(name: string): Promise<RoomResponse> {
-        return await this.httpClient.post<RoomResponse>(environment.serverURL + '/rooms', {name}).toPromise();
+    public OpenRoomPage(response: RoomResponse) {
+        this.selectedRoom = response;
+        this.router.navigate(['/room', response.id]);
+    }
+
+    public async CreateRoom(name: string, password: string, categoriesUnfiltered: string): Promise<RoomResponse> {
+
+        const categories = categoriesUnfiltered.split(',');
+
+        return await this.httpClient.post<RoomResponse>(environment.serverURL + '/rooms', {name, password, categories}).toPromise();
     }
 
     public async getMessages() {
@@ -69,10 +70,10 @@ export class RoomService {
         ).toPromise();
     }
 
-    public async setUser(roomId: string): Promise<RoomResponse> {
+    public async setUser(roomId: string, password: string): Promise<RoomResponse> {
         return await this.httpClient
             .post<RoomResponse>(`${environment.serverURL}/rooms/` + roomId + '/users',
-                {user: this.userService.currentUser.user.id}).toPromise()
+                {user: this.userService.currentUser.user.id, password}).toPromise()
     }
 
     public OpenCreateRoomPage(): void {
