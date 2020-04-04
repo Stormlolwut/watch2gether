@@ -15,16 +15,16 @@ export class RoomSocketService {
     public onLinkReceived: Array<(link: string, play: boolean) => void>;
     public onRoomJoined: Array<() => void>;
     public onVideoPaused: Array<(pausedAt: number) => void>;
-    public onVideoResumed: Array<() => void>;
-    public onTimeRequested: Array<() => void>;
+    public onVideoResumed: Array<(timestamp: number) => void>;
+    public onTimestampRequested: Array<() => void>;
 
     constructor(private userService: UserService) {
         this.onLinkReceived = new Array<(link: string, play: boolean) => void>();
         this.onMessageReceived = new Array<(message: string) => void>();
         this.onVideoPaused = new Array<(pausedAt: number) => void>()
-        this.onVideoResumed = new Array<() => void>();
+        this.onVideoResumed = new Array<(timestamp: number) => void>();
         this.onRoomJoined = new Array<() => void>();
-        this.onTimeRequested = new Array<() => void>();
+        this.onTimestampRequested = new Array<() => void>();
     }
 
     public async OpenSocket() {
@@ -71,12 +71,20 @@ export class RoomSocketService {
 
             this.socket.on('resume video', (data) => {
                 this.onVideoResumed.forEach(value => {
-                    value();
+                    console.log(data);
+                    if(data)
+                    {
+                        value(data.timestamp);
+                    }
+                    else
+                    {
+                        value(undefined);
+                    }
                 })
-            })
+            });
 
-            this.socket.on('request time', () => {
-                this.onTimeRequested.forEach(value => {
+            this.socket.on('requestCurTimestamp', () => {
+                this.onTimestampRequested.forEach(value => {
                     value();
                 })
             })
@@ -105,5 +113,13 @@ export class RoomSocketService {
 
     public videoResume(currentTime: number) {
         this.socket.emit('video resume');
+    }
+
+    public syncRandomUser() {
+        this.socket.emit('latest timestamp');
+    }
+
+    public sendCurrentTimestamp(timestamp: number) {
+        this.socket.emit('sendCurTimestamp', {timestamp});
     }
 }
