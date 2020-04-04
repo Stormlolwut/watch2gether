@@ -38,4 +38,8 @@ export class RoomVideoComponent implements OnInit {
     onValueChanged($event: CustomEvent) {
         this.roomService.newMsg = $event.detail.value;
     }
+
+    nextButtonClicked() {
+        this.roomSocket.nextVideo();
+    }
 }

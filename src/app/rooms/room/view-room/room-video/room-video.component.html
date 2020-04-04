@@ -1,11 +1,29 @@
 <ion-grid style="height: 100%">
-    <ion-row style="height: 100%;">
-        <ion-col style="background: red">
-            <app-youtube-player-angular></app-youtube-player-angular>
-        </ion-col>
-    </ion-row>
 
-    <ion-row style="height: 100%">
+    <ion-card>
+        <ion-card-content class="ion-no-padding">
+            <ion-row style="height: 90%;">
+                <ion-col>
+                    <app-youtube-player-angular></app-youtube-player-angular>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-content class="ion-no-padding">
+            <ion-row>
+                <ion-col offset="9">
+                    <ion-button (click)="nextButtonClicked()">
+                        <ion-icon name="play-skip-forward-outline"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
+
+    <ion-row style="height: 90%">
         <ion-col style="height: 100%">
             <ion-grid style="height: 100%">
                 <ion-row style="height: 90%">

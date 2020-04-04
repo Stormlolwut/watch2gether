@@ -31,7 +31,7 @@ export class RoomService {
         this.onPlayVideo = new Array<(link: string) => void>();
         this.roomSocket.roomService = this;
 
-        roomSocket.onMessageReceived.push(this.OnMessageReceived);
+        roomSocket.onMessageReceived.push((username, message) => {this.OnMessageReceived(username, message)});
         roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
@@ -120,5 +120,9 @@ export class RoomService {
         this.links[from] = this.links[to];
         this.links[to] = temp;
         console.log(this.links)
+    }
+
+    public nextVideo() {
+        this.links.shift();
     }
 }

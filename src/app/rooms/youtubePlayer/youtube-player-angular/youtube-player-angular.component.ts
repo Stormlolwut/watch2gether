@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {RoomService} from '../../../services/rooms/room.service';
-import {timeout} from 'rxjs/operators';
 import {RoomSocketService} from '../../../services/rooms/room-socket.service';
 
 @Component({
@@ -9,19 +8,17 @@ import {RoomSocketService} from '../../../services/rooms/room-socket.service';
     styleUrls: ['./youtube-player-angular.component.scss'],
 })
 export class YoutubePlayerAngularComponent implements OnInit {
-
-
     constructor(private roomService: RoomService, private roomSocket: RoomSocketService) {
         roomService.onPlayVideo.push((link) => this.onPlayVideo(link));
         roomSocket.onVideoPaused.push((pausedAt) => this.onPauseVideo(pausedAt));
-        roomSocket.onVideoResumed.push(() => this.onResumeVideo());
+        roomSocket.onVideoResumed.push((time) => this.onResumeVideo(time));
         roomSocket.onRoomJoined.push(() => this.onRoomJoined());
-        roomSocket.onTimeRequested.push(() => this.onTimeRequested());
+        roomSocket.onTimestampRequested.push(() => this.onTimeStampRequested());
+        roomSocket.onNextVideo.push(() => this.onNextVideo());
     }
 
     public player: YT.Player;
 
-    private playVideoIfReader: boolean;
 
     ngOnInit() {
         const tag = document.createElement('script');
@@ -35,10 +32,8 @@ export class YoutubePlayerAngularComponent implements OnInit {
         this.player = event.target;
         this.player.addEventListener('onStateChange', (data: YT.OnStateChangeEvent) => {
             if (data.data === YT.PlayerState.PAUSED) {
-                console.log('Paused')
                 this.roomSocket.videoPausedAt(data.target.getCurrentTime());
             } else if (data.data === YT.PlayerState.PLAYING) {
-                console.log('Playing');
                 this.roomSocket.videoResume(data.target.getCurrentTime());
             }
         });
@@ -48,8 +43,6 @@ export class YoutubePlayerAngularComponent implements OnInit {
                 this.onPlayVideo(this.roomService.links[0].link);
             }
         }, 1000);
-
-        console.log(this.player.getPlayerState());
     }
 
     onPlayVideo(link: string) {
@@ -65,18 +58,37 @@ export class YoutubePlayerAngularComponent implements OnInit {
         this.player.seekTo(pausedAt, true)
     }
 
-    private onResumeVideo() {
-        this.player.playVideo();
+    private onResumeVideo(timestamp: number) {
+        if (this.player) {
+            if (timestamp) {
+                setTimeout(() => {
+                    this.player.seekTo(timestamp + 4, true)
+                    this.player.playVideo();
+                }, 4000);
+            } else {
+                this.player.playVideo();
+            }
+        }
     }
 
     private onRoomJoined() {
-        this.playVideoIfReader = true;
+        this.roomSocket.syncRandomUser();
     }
 
-    private onTimeRequested() {
-        if (this.player && this.player.getPlayerState() !== YT.PlayerState.CUED) {
-            this.roomSocket.videoPausedAt(this.player.getCurrentTime());
-            this.roomSocket.videoResume(this.player.getCurrentTime());
+    private onTimeStampRequested() {
+        if (this.player) {
+            this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
         }
+    }
+
+    private onNextVideo() {
+        setTimeout(() => {
+            if (this.roomService.links.length > 0) {
+                this.onPlayVideo(this.roomService.links[0].link);
+                setTimeout(() => {
+                    this.player.playVideo();
+                }, 1000)
+            }
+        }, 1000);
     }
 }
