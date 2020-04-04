@@ -5,6 +5,9 @@
                 <ion-label>
                     {{item.title}}
                 </ion-label>
+                <ion-button (click)="onNext(item)" color="transparent">
+                    <ion-icon color="danger" name="trash-outline"></ion-icon>
+                </ion-button>
                 <ion-reorder slot="end"></ion-reorder>
             </ion-item>
 
