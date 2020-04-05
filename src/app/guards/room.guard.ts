@@ -3,7 +3,7 @@ import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from 
 import {RoomService} from '../services/rooms/room.service';
 import {RoomSocketService} from '../services/rooms/room-socket.service';
 import {AlertController} from '@ionic/angular';
-import {RoomResponse} from '../interfaces/room-response';
+import {RoomInterface} from '../interfaces/room-response';
 import {UserService} from '../services/user/user.service';
 
 @Injectable({
@@ -19,11 +19,9 @@ export class RoomGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Promise<boolean | UrlTree> {
 
-        const result = await this.roomService.getRoom(next.params.id);
-        const roomResponse = result.room;
-        
+        const roomResponse = await this.roomService.getRoom(next.params.id);
+
         let password: string;
-        console.log(roomResponse);
 
         if (roomResponse.password !== '' && !this.userAlreadyInRoom(roomResponse)) {
             const alert = await this.alertController.create({
@@ -49,12 +47,9 @@ export class RoomGuard implements CanActivate {
         await this.roomService.getMessages();
         await this.roomSocket.OpenSocket();
         return true;
-
-        // TODO: Password.
-        // return false;
     }
 
-    private userAlreadyInRoom(roomResponse: any) {
+    private userAlreadyInRoom(roomResponse: RoomInterface) {
 
         const currentUser = this.userService.currentUser.user.id.toString();
         for (const user of roomResponse.users){

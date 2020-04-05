@@ -1,5 +1,5 @@
 import {UserService} from '../user/user.service';
-import {AllMessagesInterface} from '../../interfaces/room-response';
+import {AllMessagesInterface, RoomInterface} from '../../interfaces/room-response';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {RoomsResponse} from '../../interfaces/rooms-response';
@@ -17,7 +17,7 @@ export class RoomService {
     public rooms: Array<any>;
     public links: { link: string, title: string }[] = [];
 
-    public selectedRoom: RoomResponse;
+    public selectedRoom: RoomInterface;
     public onPlayVideo: Array<(link: string) => void>;
 
     constructor(
@@ -31,18 +31,20 @@ export class RoomService {
         this.onPlayVideo = new Array<(link: string) => void>();
         this.roomSocket.roomService = this;
 
-        roomSocket.onMessageReceived.push((username, message) => {this.OnMessageReceived(username, message)});
+        roomSocket.onMessageReceived.push((username, message) => {
+            this.OnMessageReceived(username, message)
+        });
         roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
     public async getRooms(page: number) {
-            console.log(page);
-         await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`, {}).toPromise().then((value) => {
-             this.rooms = value.rooms;
-         });
+        console.log(page);
+        await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`, {}).toPromise().then((value) => {
+            this.rooms = value.rooms;
+        });
     }
 
-    public OpenRoomPage(response: RoomResponse) {
+    public OpenRoomPage(response: RoomInterface) {
         this.selectedRoom = response;
         this.router.navigate(['/room', response.id]);
     }
@@ -63,11 +65,13 @@ export class RoomService {
 
     }
 
-    public async getRoom(roomId: string): Promise<RoomResponse> {
-        return await this.httpClient.get<RoomResponse>(
+    public async getRoom(roomId: string): Promise<RoomInterface> {
+        const roomResponse = await this.httpClient.get<RoomResponse>(
             `${environment.serverURL}/rooms/` + roomId,
             {}
         ).toPromise();
+
+        return roomResponse.room;
     }
 
     public async setUser(roomId: string, password: string): Promise<RoomResponse> {
@@ -106,8 +110,7 @@ export class RoomService {
                     this.links.push({link, title: json.title});
                 },
                 error => console.error(error));
-        if(play)
-        {
+        if (play) {
             this.onPlayVideo.forEach(value => {
                 value(link);
             })

@@ -1,6 +1,12 @@
 import {UserResponseInterface} from './auth-response';
 
 export interface RoomResponse {
+    room: RoomInterface,
+    message: string,
+    statusCode: number,
+}
+
+export interface RoomInterface {
     id: string,
     name: string,
     password: string,

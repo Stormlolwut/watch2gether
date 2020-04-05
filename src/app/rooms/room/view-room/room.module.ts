@@ -7,6 +7,7 @@ import {YoutubePlayerAngularComponent} from '../../youtubePlayer/youtube-player-
 import {RoomVideoComponent} from './room-video/room-video.component';
 import {RoomVideoListComponent} from './room-video-list/room-video-list.component';
 import {RoomUsersComponent} from './room-users/room-users.component';
+import {Vibration} from '@ionic-native/vibration/ngx';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import {RoomUsersComponent} from './room-users/room-users.component';
         YouTubePlayerModule,
     ],
     declarations: [RoomPage, YoutubePlayerAngularComponent, RoomVideoComponent, RoomVideoListComponent, RoomUsersComponent],
+    providers: [Vibration]
 })
 export class RoomPageModule {
 }
