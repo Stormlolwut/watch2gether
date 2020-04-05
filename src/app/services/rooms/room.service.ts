@@ -37,8 +37,11 @@ export class RoomService {
         roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
-    public async getRooms(page: number) {
-        await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`, {}).toPromise().then((value) => {
+    public async getRooms(page: number, id: string) {
+        const userParam = (id !== undefined) ? `&user=${id}` : '';
+
+        await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`+ userParam)
+            .toPromise().then((value) => {
             this.rooms = value.rooms;
         });
     }

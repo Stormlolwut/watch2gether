@@ -18,10 +18,13 @@
 
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-grid style="height: 100%">
     <ion-row style="height: 100%">
       <ion-col style="height: 100%">
-        <ion-content>
           <ion-searchbar inputmode="search" [(ngModel)]="searchOutput" (ionChange)="filterRooms()"></ion-searchbar>
           <ion-list>
             <ion-card class="list-card" *ngFor="let i of filteredRooms" (click)="onCardClick(i)">
@@ -37,13 +40,13 @@
               </ion-item>
             </ion-card>
           </ion-list>
+
           <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
             <ion-infinite-scroll-content
                     loadingSpinner="bubbles"
                     loadingText="Loading more data...">
             </ion-infinite-scroll-content>
           </ion-infinite-scroll>
-        </ion-content>
       </ion-col>
       <!-- fab placed to the (vertical) center and end -->
     </ion-row>
