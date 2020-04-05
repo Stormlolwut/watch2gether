@@ -1,4 +1,4 @@
-import {RoomResponse} from '../interfaces/room-response';
+import {RoomInterface, RoomResponse} from '../interfaces/room-response';
 import {RoomsResponse} from '../interfaces/rooms-response';
 import {RoomService} from '../services/rooms/room.service';
 import {Component, OnInit} from '@angular/core';
@@ -12,8 +12,8 @@ import {AlertController, MenuController} from '@ionic/angular';
 export class RoomsPage implements OnInit {
 
     public searchOutput: string;
-    public rooms : Array<RoomResponse> = [];
-    public filteredRooms: Array<RoomResponse> = [];
+    public rooms : Array<RoomInterface> = [];
+    public filteredRooms: Array<RoomInterface> = [];
 
     private allRoomsLoaded = false;
     private currentPage : number;
@@ -35,7 +35,7 @@ export class RoomsPage implements OnInit {
         this.filteredRooms = this.items;
     }
 */
-    public async onCardClick(room: RoomResponse) {
+    public async onCardClick(room: RoomInterface) {
         this.roomService.OpenRoomPage(room);
     }
 

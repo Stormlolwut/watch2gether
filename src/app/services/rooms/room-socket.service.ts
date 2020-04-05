@@ -57,7 +57,7 @@ export class RoomSocketService {
 
             this.socket.on('videoAdded', (data) => {
                 this.onLinkReceived.forEach((value) => {
-                    value(data.link, true);
+                    value(data.link, false);
                 })
             });
 
@@ -92,7 +92,11 @@ export class RoomSocketService {
                 this.onNextVideo.forEach(value => {
                     value();
                 })
-            })
+            });
+
+            this.socket.on('removeVideo', (data) => {
+                this.roomService.links.splice(data.position, 1);
+            });
         }
     }
 
@@ -130,5 +134,9 @@ export class RoomSocketService {
 
     public nextVideo() {
         this.socket.emit('nextVideo');
+    }
+
+    public removeVideo(position: number) {
+        this.socket.emit('removeVideo', {position});
     }
 }

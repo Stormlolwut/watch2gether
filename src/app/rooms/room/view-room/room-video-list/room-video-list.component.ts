@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
 import {ToastController} from '@ionic/angular';
 import {RoomService} from '../../../../services/rooms/room.service';
-import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-room-video-list',
@@ -62,5 +61,9 @@ export class RoomVideoListComponent implements OnInit {
         console.log('from: ' + ev.detail.from + ' to: ' + ev.detail.to);
 
         ev.detail.complete();
+    }
+
+    public onNext(item: { link: string, title: string }) {
+        this.roomSocket.removeVideo(this.roomService.links.indexOf(item));
     }
 }
