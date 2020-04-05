@@ -1,13 +1,15 @@
 import {UserResponseInterface} from './auth-response';
 
 export interface RoomResponse {
-
     id: string,
     name: string,
     password: string,
     picture: string,
     categories: [string],
-    users: [],
+    users: [{
+        user: string,
+        roles: [string]
+    }],
     blacklist: {
         enabled: boolean,
         [userId: number]: string

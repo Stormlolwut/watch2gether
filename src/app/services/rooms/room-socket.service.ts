@@ -34,7 +34,7 @@ export class RoomSocketService {
 
         if (token && token.length > 0) {
             this.socket = io(environment.serverURL + '/chat', {forceNew: true, query: {token}});
-            this.socket.emit('join room', {roomId: this.roomService.selectedRoom.room.id});
+            this.socket.emit('join room', {roomId: this.roomService.selectedRoom.id});
 
             this.socket.on('joined room', (data) => {
                 console.log('hello people');
@@ -103,7 +103,7 @@ export class RoomSocketService {
     public postMessage(msg: string) {
         this.socket.emit('send message', {
             name: this.userService.currentUser.user.name,
-            roomId: this.roomService.selectedRoom.room.id,
+            roomId: this.roomService.selectedRoom.id,
             msg
         });
     }

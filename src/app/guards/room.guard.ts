@@ -3,22 +3,29 @@ import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from 
 import {RoomService} from '../services/rooms/room.service';
 import {RoomSocketService} from '../services/rooms/room-socket.service';
 import {AlertController} from '@ionic/angular';
+import {RoomResponse} from '../interfaces/room-response';
+import {UserService} from '../services/user/user.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoomGuard implements CanActivate {
 
-    constructor(private roomService: RoomService, private roomSocket: RoomSocketService, private alertController: AlertController) {}
+    constructor(private roomService: RoomService, private userService: UserService,
+                private roomSocket: RoomSocketService, private alertController: AlertController) {
+    }
 
     async canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Promise<boolean | UrlTree> {
 
-        const roomResponse = await this.roomService.getRoom(next.params.id);
+        const result = await this.roomService.getRoom(next.params.id);
+        const roomResponse = result.room;
+        
         let password: string;
+        console.log(roomResponse);
 
-        if(roomResponse.room.password !== ''){
+        if (roomResponse.password !== '' && !this.userAlreadyInRoom(roomResponse)) {
             const alert = await this.alertController.create({
                 header: 'Password required!',
                 inputs: [{
@@ -45,5 +52,16 @@ export class RoomGuard implements CanActivate {
 
         // TODO: Password.
         // return false;
+    }
+
+    private userAlreadyInRoom(roomResponse: any) {
+
+        const currentUser = this.userService.currentUser.user.id.toString();
+        for (const user of roomResponse.users){
+            if(user.user === currentUser){
+                return true;
+            }
+        }
+        return false;
     }
 }
