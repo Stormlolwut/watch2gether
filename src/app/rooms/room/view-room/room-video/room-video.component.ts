@@ -26,7 +26,7 @@ export class RoomVideoComponent implements OnInit {
         }, 1000);
 
         const roles = this.fetchUserRoleFromRoom();
-        this.isOwner = roles.includes('owner');
+        this.isOwner = roles.includes('owner') || roles.includes('admin');
     }
 
     ngOnInit() {
