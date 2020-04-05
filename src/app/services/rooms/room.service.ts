@@ -38,7 +38,6 @@ export class RoomService {
     }
 
     public async getRooms(page: number) {
-        console.log(page);
         await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`, {}).toPromise().then((value) => {
             this.rooms = value.rooms;
         });
@@ -52,17 +51,7 @@ export class RoomService {
     public async CreateRoom(name: string, password: string, categoriesUnfiltered: string): Promise<RoomResponse> {
 
         const categories = categoriesUnfiltered.split(',');
-
         return await this.httpClient.post<RoomResponse>(environment.serverURL + '/rooms', {name, password, categories}).toPromise();
-    }
-
-    public async getMessages() {
-        const url = `${environment.serverURL}/rooms/${this.selectedRoom.id}/messages`;
-
-        await this.httpClient.get<AllMessagesInterface>(url).toPromise().then((value) => {
-            this.messages = value.messages;
-        });
-
     }
 
     public async getRoom(roomId: string): Promise<RoomInterface> {
@@ -74,10 +63,35 @@ export class RoomService {
         return roomResponse.room;
     }
 
+    public async deleteRoom() : Promise<string>{
+        const roomResponse = await this.httpClient.delete<RoomResponse>(
+            `${environment.serverURL}/rooms/${this.selectedRoom.id}`).toPromise();
+        return roomResponse.statusCode.toString();
+    }
+
+
+    public async updateRoom(room: ({ name: string, password: string })) : Promise<RoomResponse>{
+        return await this.httpClient.put<RoomResponse>(`${environment.serverURL}/rooms/${this.selectedRoom.id}`, room).toPromise();
+    }
+
+    public async getMessages() {
+        const url = `${environment.serverURL}/rooms/${this.selectedRoom.id}/messages`;
+
+        await this.httpClient.get<AllMessagesInterface>(url).toPromise().then((value) => {
+            this.messages = value.messages;
+        });
+
+    }
+
     public async setUser(roomId: string, password: string): Promise<RoomResponse> {
         return await this.httpClient
             .post<RoomResponse>(`${environment.serverURL}/rooms/` + roomId + '/users',
                 {user: this.userService.currentUser.user.id, password}).toPromise()
+    }
+
+    public async removeUser() : Promise<RoomResponse> {
+        return await this.httpClient.delete<RoomResponse>
+        (`${environment.serverURL}/rooms/${this.selectedRoom.id}/users/${this.userService.currentUser.user.name}_${this.userService.currentUser.user.discriminator}`).toPromise();
     }
 
     public OpenCreateRoomPage(): void {

@@ -30,6 +30,12 @@ const routes: Routes = [
     canDeactivate: [CanDeactivateRoomGuard],
   },
   {
+    path: 'room/:id/settings',
+    loadChildren: () => import('./rooms/room/settings-room/settings-room.module').then(m => m.SettingsRoomPageModule),
+    canActivate: [UserGuard, RoomGuard],
+    canDeactivate: [CanDeactivateRoomGuard],
+  },
+  {
     path: 'createRoom',
     loadChildren: () => import('./rooms/room/create-room/create-room.module').then(m => m.CreateRoomPageModule),
     canActivate: [UserGuard]

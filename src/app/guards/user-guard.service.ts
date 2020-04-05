@@ -15,8 +15,13 @@ export class UserGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Promise<boolean | UrlTree> {
 
-        this.userService.getUserInformation();
+        const response  = await this.userService.getUserInformation();
+        this.userService.currentUser = response;
+        console.log('hiero');
 
+        this.userService.OnUserInfoReceived?.forEach(element => {
+            element(response);
+        });
         return true;
     }
 

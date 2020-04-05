@@ -38,20 +38,20 @@ export class RoomGuard implements CanActivate {
             password = passwordResponse.data?.values?.password;
         }
 
-        await this.roomService.setUser(next.params.id, password);
-
         this.roomService.selectedRoom = roomResponse;
 
         this.roomService.setLinksOfRoom();
-
         await this.roomService.getMessages();
         await this.roomSocket.OpenSocket();
+        await this.roomService.setUser(next.params.id, password);
+
         return true;
     }
 
     private userAlreadyInRoom(roomResponse: RoomInterface) {
 
         const currentUser = this.userService.currentUser.user.id.toString();
+        console.log(roomResponse.users);
         for (const user of roomResponse.users){
             if(user.user === currentUser){
                 return true;

@@ -34,16 +34,8 @@ export class UserService {
         return this.storage.get(this.ACCESSTOKEN);
     }
 
-    public getUserInformation() {
-        this.httpClient.get<AuthResponse>(environment.serverURL, {}).subscribe((value) => {
-                this.currentUser = value;
-                this.OnUserInfoReceived?.forEach(element => {
-                    element(value);
-                });
-            },
-            error => {
-                console.log(error);
-            });
+    public async getUserInformation() : Promise<AuthResponse> {
+        return await this.httpClient.get<AuthResponse>(`${environment.serverURL}/`, {}).toPromise();
     }
 
     public getAllUsers(success: (response: AuthResponse) => void, err: () => void): void {

@@ -11,77 +11,86 @@
     </ion-card>
 
     <ion-card>
-        <ion-card-content class="ion-no-padding">
-            <ion-row>
-                <ion-col offset="9">
-                    <ion-button (click)="nextButtonClicked()">
-                        <ion-icon name="play-skip-forward-outline"></ion-icon>
-                    </ion-button>
-                </ion-col>
-            </ion-row>
+        <ion-card-header>
+            <header>Room controls</header>
+        </ion-card-header>
+        <ion-card-content style="text-align: center">
+            <ion-button *ngIf="!isOwner" (click)="leaveButtonClicked()" fill="outline" color="danger">
+                <ion-label>Leave room</ion-label>
+            </ion-button>
+            <ion-button *ngIf="isOwner" (click)="deleteRoomButtonClicked()" fill="outline" color="danger">
+                <ion-label>Delete room</ion-label>
+            </ion-button>
+            <ion-button (click)="nextButtonClicked()">
+                <ion-icon name="play-skip-forward-outline"></ion-icon>
+                <ion-label>Skip Video</ion-label>
+            </ion-button>
+            <ion-button (click)="settingsButtonClicked()">
+                <ion-icon name="cog-outline"></ion-icon>
+            </ion-button>
         </ion-card-content>
     </ion-card>
 
+    <ion-card style="height: 90%">
+        <ion-grid style="height: 100%">
+            <ion-row style="height: 100%">
+                <ion-col style="max-height: 100%">
+                    <ion-content style="max-height: 100%; overflow-y: auto;" #content>
+                        <ion-row align-items-center text-center>
+                            <ion-col>
+                                <ion-grid style="max-height: 100%;">
+                                    <ion-row *ngFor="let message of roomService.messages">
+                                        <ion-col size="9"
+                                                 *ngIf="userService.currentUser.user.name !== message.sender.name"
+                                                 class="message other-message">
+                                            <b>{{ message.sender.name }}</b><br>
+                                            <span> {{ message.line }} </span>
+                                            <div class="time ion-text-right"><br>
+                                                {{ message.timestamp | date:'short' }}
+                                            </div>
+                                        </ion-col>
 
-    <ion-row style="height: 90%">
-        <ion-col style="height: 100%">
-            <ion-grid style="height: 100%">
-                <ion-row style="height: 90%">
-                    <ion-col style="max-height: 100%">
-                        <ion-content style="max-height: 100%; overflow-y: auto;" #content>
-                            <ion-row align-items-center text-center>
-                                <ion-col size="12">
-                                    <ion-grid style="max-height: 100%;">
-                                        <ion-row *ngFor="let message of roomService.messages">
-                                            <ion-col size="9"
-                                                     *ngIf="userService.currentUser.user.name !== message.sender.name"
-                                                     class="message other-message">
-                                                <b>{{ message.sender.name }}</b><br>
-                                                <span> {{ message.line }} </span>
-                                                <div class="time ion-text-right"><br>
-                                                    {{ message.timestamp | date:'short' }}
-                                                </div>
-                                            </ion-col>
-
-                                            <ion-col size="9" offset="3"
-                                                     *ngIf="userService.currentUser.user.name === message.sender.name"
-                                                     class="message my-message">
-                                                <b>{{ message.sender.name }}</b><br>
-                                                <span> {{ message.line }} </span>
-                                                <div class="time ion-text-right"><br>
-                                                    {{ message.timestamp | date:'short' }}
-                                                </div>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ion-grid>
-                                </ion-col>
-                            </ion-row>
-                        </ion-content>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-row class="ion-align-items-center">
-                            <ion-col size="10">
-                                <ion-item color="light">
-                                    <ion-textarea auto-grow="true" rows={6} placeholder="Message"
-                                                  [value]="roomService.newMsg" (ionChange)="onValueChanged($event)"
-                                                  (keydown.enter)="sendMessage($event)">
-                                    </ion-textarea>
-                                </ion-item>
-                            </ion-col>
-                            <ion-col size="2">
-                                <ion-button expand="block" fill="clear" color="primary"
-                                            [disabled]="roomService.newMsg === ''"
-                                            class="msg-btn"
-                                            (click)="sendMessage($event)">
-                                    <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-                                </ion-button>
+                                        <ion-col size="9" offset="3"
+                                                 *ngIf="userService.currentUser.user.name === message.sender.name"
+                                                 class="message my-message">
+                                            <b>{{ message.sender.name }}</b><br>
+                                            <span> {{ message.line }} </span>
+                                            <div class="time ion-text-right"><br>
+                                                {{ message.timestamp | date:'short' }}
+                                            </div>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
                             </ion-col>
                         </ion-row>
+                    </ion-content>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card>
+
+    <ion-card>
+        <ion-row>
+            <ion-col size="12">
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="10">
+                        <ion-item color="light">
+                            <ion-input  placeholder="Message" [value]="roomService.newMsg" (ionChange)="onValueChanged($event)"
+                                        (keydown.enter)="sendMessage($event)">
+                            </ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="2">
+                        <ion-button expand="block" color="primary"
+                                    [disabled]="roomService.newMsg === ''"
+                                    class="msg-btn"
+                                    (click)="sendMessage($event)">
+                            <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+                        </ion-button>
                     </ion-col>
                 </ion-row>
-            </ion-grid>
-        </ion-col>
-    </ion-row>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+
 </ion-grid>
