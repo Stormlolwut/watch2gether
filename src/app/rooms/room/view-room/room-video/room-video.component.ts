@@ -3,7 +3,7 @@ import {RoomService} from '../../../../services/rooms/room.service';
 import {UserService} from '../../../../services/user/user.service';
 import {IonContent} from '@ionic/angular';
 import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
-import { Vibration } from '@ionic-native/vibration/ngx';
+import {Vibration} from '@ionic-native/vibration/ngx';
 import {Router} from '@angular/router';
 
 @Component({
@@ -14,11 +14,11 @@ import {Router} from '@angular/router';
 export class RoomVideoComponent implements OnInit {
     @ViewChild('content') private content: IonContent;
 
-    public isOwner : boolean;
+    public isOwner: boolean;
 
     constructor(public roomService: RoomService,
                 public userService: UserService,
-                private router : Router,
+                private router: Router,
                 private roomSocket: RoomSocketService,
                 private vibration: Vibration) {
         setTimeout(() => {
@@ -30,17 +30,23 @@ export class RoomVideoComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.roomSocket.onMessageReceived.push((userName: string, message: string) => {
-            setTimeout(() => {
-                this.content.scrollToBottom(200);
+        if (this.roomSocket.onMessageReceived.length !== 2)
+        {
+            this.roomSocket.onMessageReceived.push((userName: string, message: string) => {
+                setTimeout(() => {
+                    this.content.scrollToBottom(200);
+                });
             });
-        });
+        }
+
     }
+
     sendMessage($event: any) {
         this.roomSocket.postMessage(this.roomService.newMsg);
         this.roomService.newMsg = '';
         $event.preventDefault();
     }
+
     onValueChanged($event: CustomEvent) {
         this.roomService.newMsg = $event.detail.value;
     }
@@ -50,12 +56,12 @@ export class RoomVideoComponent implements OnInit {
         this.vibration.vibrate(500);
     }
 
-    private fetchUserRoleFromRoom() : Array<string>{
+    private fetchUserRoleFromRoom(): Array<string> {
         const user = this.userService.currentUser.user;
         const room = this.roomService.selectedRoom;
 
-        for (const roomUser of room.users){
-            if(roomUser.user === user.id && roomUser.roles){
+        for (const roomUser of room.users) {
+            if (roomUser.user === user.id && roomUser.roles) {
                 return roomUser.roles;
             }
 
@@ -63,16 +69,16 @@ export class RoomVideoComponent implements OnInit {
         return ['guest'];
     }
 
-    async leaveButtonClicked(){
+    async leaveButtonClicked() {
         const response = await this.roomService.removeUser();
-        if(response.statusCode.toString() === '200'){
+        if (response.statusCode.toString() === '200') {
             await this.router.navigate(['rooms']);
         }
     }
 
-    async deleteRoomButtonClicked(){
+    async deleteRoomButtonClicked() {
         const response = await this.roomService.deleteRoom();
-        if(response === '200'){
+        if (response === '200') {
             await this.router.navigate(['rooms']);
         }
     }

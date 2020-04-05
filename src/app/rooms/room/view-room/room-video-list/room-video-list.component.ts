@@ -58,7 +58,6 @@ export class RoomVideoListComponent implements OnInit {
 
 
         this.roomSocket.updateQueue(ev.detail.from, ev.detail.to);
-        console.log('from: ' + ev.detail.from + ' to: ' + ev.detail.to);
 
         ev.detail.complete();
     }

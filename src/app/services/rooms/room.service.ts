@@ -31,10 +31,12 @@ export class RoomService {
         this.onPlayVideo = new Array<(link: string) => void>();
         this.roomSocket.roomService = this;
 
-        roomSocket.onMessageReceived.push((username, message) => {
-            this.OnMessageReceived(username, message)
-        });
-        roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
+
+        if (roomSocket.onMessageReceived.length !== 2)
+            roomSocket.onMessageReceived.push((username, message) => this.OnMessageReceived(username, message)
+            );
+        if (roomSocket.onLinkReceived.length === 0)
+            roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
     }
 
     public async getRooms(page: number) {
@@ -63,14 +65,14 @@ export class RoomService {
         return roomResponse.room;
     }
 
-    public async deleteRoom() : Promise<string>{
+    public async deleteRoom(): Promise<string> {
         const roomResponse = await this.httpClient.delete<RoomResponse>(
             `${environment.serverURL}/rooms/${this.selectedRoom.id}`).toPromise();
         return roomResponse.statusCode.toString();
     }
 
 
-    public async updateRoom(room: ({ name: string, password: string })) : Promise<RoomResponse>{
+    public async updateRoom(room: ({ name: string, password: string })): Promise<RoomResponse> {
         return await this.httpClient.put<RoomResponse>(`${environment.serverURL}/rooms/${this.selectedRoom.id}`, room).toPromise();
     }
 
@@ -89,7 +91,7 @@ export class RoomService {
                 {user: this.userService.currentUser.user.id, password}).toPromise()
     }
 
-    public async removeUser() : Promise<RoomResponse> {
+    public async removeUser(): Promise<RoomResponse> {
         return await this.httpClient.delete<RoomResponse>
         (`${environment.serverURL}/rooms/${this.selectedRoom.id}/users/${this.userService.currentUser.user.name}_${this.userService.currentUser.user.discriminator}`).toPromise();
     }

@@ -3,6 +3,7 @@ import {RoomsResponse} from '../interfaces/rooms-response';
 import {RoomService} from '../services/rooms/room.service';
 import {Component, OnInit} from '@angular/core';
 import {AlertController, MenuController} from '@ionic/angular';
+import {UserService} from '../services/user/user.service';
 
 @Component({
     selector: 'app-rooms',
@@ -18,7 +19,7 @@ export class RoomsPage implements OnInit {
     private allRoomsLoaded = false;
     private currentPage : number;
 
-    constructor(private menuController: MenuController, public roomService: RoomService, private alertController: AlertController) {
+    constructor(private menuController: MenuController, public userService: UserService, public roomService: RoomService, private alertController: AlertController) {
         this.currentPage = 0;
         this.getRooms(this.currentPage++);
     }

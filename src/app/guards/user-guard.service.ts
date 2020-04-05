@@ -17,7 +17,6 @@ export class UserGuard implements CanActivate {
 
         const response  = await this.userService.getUserInformation();
         this.userService.currentUser = response;
-        console.log('hiero');
 
         this.userService.OnUserInfoReceived?.forEach(element => {
             element(response);

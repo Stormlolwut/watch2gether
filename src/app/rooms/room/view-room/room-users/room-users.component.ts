@@ -23,8 +23,10 @@ export class RoomUsersComponent implements OnInit {
                 private geolocation: Geolocation,
                 private httpClient: HttpClient,
                 private platform: Platform) {
-        this.roomSocketService.onUserInfoReceived.push((users) => this.onUsersReceived(users))
-        this.roomSocketService.onRoomJoined.push(() => this.onOtherUserJoined())
+        if (this.roomSocketService.onUserInfoReceived.length === 0)
+            this.roomSocketService.onUserInfoReceived.push((users) => this.onUsersReceived(users))
+        if (this.roomSocketService.onRoomJoined.length !== 2)
+            this.roomSocketService.onRoomJoined.push(() => this.onOtherUserJoined())
     }
 
     ngOnInit() {
@@ -56,6 +58,8 @@ export class RoomUsersComponent implements OnInit {
                     src: `https://www.countryflags.io/${this.userService.countryCode}/flat/64.png`
                 };
                 this.roomSocketService.sendUserInformation(userInfo);
+            }).catch(error => {
+                console.log(error)
             });
         }
     }

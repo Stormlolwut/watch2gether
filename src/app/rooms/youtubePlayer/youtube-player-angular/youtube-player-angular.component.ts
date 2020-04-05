@@ -9,12 +9,20 @@ import {RoomSocketService} from '../../../services/rooms/room-socket.service';
 })
 export class YoutubePlayerAngularComponent implements OnInit {
     constructor(private roomService: RoomService, private roomSocket: RoomSocketService) {
-        roomService.onPlayVideo.push((link) => this.onPlayVideo(link));
-        roomSocket.onVideoPaused.push((pausedAt) => this.onPauseVideo(pausedAt));
-        roomSocket.onVideoResumed.push((time) => this.onResumeVideo(time));
-        roomSocket.onRoomJoined.push(() => this.onRoomJoined());
-        roomSocket.onTimestampRequested.push(() => this.onTimeStampRequested());
-        roomSocket.onNextVideo.push(() => this.onNextVideo());
+        const playVideo = (link) => this.onPlayVideo(link);
+
+        if (roomService.onPlayVideo.length === 0)
+            roomService.onPlayVideo.push(playVideo);
+        if (roomSocket.onVideoPaused.length === 0)
+            roomSocket.onVideoPaused.push((pausedAt) => this.onPauseVideo(pausedAt));
+        if (roomSocket.onVideoResumed.length === 0)
+            roomSocket.onVideoResumed.push((time) => this.onResumeVideo(time));
+        if (roomSocket.onRoomJoined.length !== 2)
+            roomSocket.onRoomJoined.push(() => this.onRoomJoined());
+        if (roomSocket.onTimestampRequested.length === 0)
+            roomSocket.onTimestampRequested.push(() => this.onTimeStampRequested());
+        if (roomSocket.onNextVideo.length === 0)
+            roomSocket.onNextVideo.push(() => this.onNextVideo());
     }
 
     public player: YT.Player;
@@ -54,19 +62,25 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onPauseVideo(pausedAt: number) {
-        this.player.pauseVideo();
-        this.player.seekTo(pausedAt, true)
+        if (this.player) {
+            this.player.pauseVideo();
+            this.player.seekTo(pausedAt, true)
+        }
     }
 
     private onResumeVideo(timestamp: number) {
         if (this.player) {
             if (timestamp) {
                 setTimeout(() => {
-                    this.player.seekTo(timestamp + 4, true)
-                    this.player.playVideo();
+                    if (this.player) {
+                        this.player.seekTo(timestamp + 4, true)
+                        this.player.playVideo();
+                    }
                 }, 4000);
             } else {
-                this.player.playVideo();
+                if (this.player) {
+                    this.player.playVideo();
+                }
             }
         }
     }
@@ -86,7 +100,9 @@ export class YoutubePlayerAngularComponent implements OnInit {
             if (this.roomService.links.length > 0) {
                 this.onPlayVideo(this.roomService.links[0].link);
                 setTimeout(() => {
-                    this.player.playVideo();
+                    if (this.player) {
+                        this.player.playVideo();
+                    }
                 }, 1000)
             }
         }, 1000);

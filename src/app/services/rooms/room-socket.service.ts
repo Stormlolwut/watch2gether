@@ -3,7 +3,6 @@ import {environment} from '../../../environments/environment';
 import {UserService} from '../user/user.service';
 import * as io from 'socket.io-client';
 import {RoomService} from './room.service';
-import {RoomUsersInfo} from './room-user-info';
 
 @Injectable({
     providedIn: 'root'
@@ -22,13 +21,18 @@ export class RoomSocketService {
     public onUserInfoReceived: Array<(RoomUsersInfo) => void>;
 
     constructor(private userService: UserService) {
-        this.onLinkReceived = new Array<(link: string, play: boolean) => void>();
-        this.onMessageReceived = new Array<(message: string) => void>();
-        this.onVideoPaused = new Array<(pausedAt: number) => void>();
-        this.onVideoResumed = new Array<(timestamp: number) => void>();
-        this.onRoomJoined = new Array<() => void>();
-        this.onNextVideo = new Array<() => void>();
-        this.onTimestampRequested = new Array<() => void>();
+        this.initializeCallbacks();
+    }
+
+    public initializeCallbacks()
+    {
+        this.onLinkReceived = [];
+        this.onMessageReceived = [];
+        this.onVideoPaused = [];
+        this.onVideoResumed = [];
+        this.onRoomJoined = [];
+        this.onNextVideo = [];
+        this.onTimestampRequested = [];
         this.onUserInfoReceived = [];
     }
 
@@ -36,7 +40,12 @@ export class RoomSocketService {
         const token = await this.userService.getToken();
 
         if (token && token.length > 0) {
-            this.socket = io(environment.serverURL + '/chat', {forceNew: true, query: {token}});
+            if(!this.socket)
+            {
+                this.socket = io(environment.serverURL + '/chat', {forceNew: true, query: {token}});
+            }
+
+            this.socket.removeAllListeners()
             this.socket.emit('join room', {roomId: this.roomService.selectedRoom.id});
 
             this.socket.on('joined room', (data) => {
@@ -50,6 +59,7 @@ export class RoomSocketService {
             });
 
             this.socket.on('received message', (data) => {
+                console.log(this.onMessageReceived.length);
                 this.onMessageReceived.forEach(value => {
                     value(data.userId, data.message);
                 })
