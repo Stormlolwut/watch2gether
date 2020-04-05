@@ -15,7 +15,12 @@ const routes: Routes = [
   {
     path: 'create-room',
     loadChildren: () => import('./room/create-room/create-room.module').then(m => m.CreateRoomPageModule)
+  },
+  {
+    path: 'settings-room',
+    loadChildren: () => import('./room/settings-room/settings-room.module').then(m => m.SettingsRoomPageModule)
   }
+
 ];
 
 @NgModule({

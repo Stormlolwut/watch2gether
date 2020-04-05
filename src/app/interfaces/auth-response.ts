@@ -12,5 +12,6 @@ export interface UserResponseInterface {
     name: string,
     email: string,
     token: string,
+    discriminator: string,
     profile_picture: string,
 }

@@ -1,16 +1,14 @@
 <ion-header [translucent]="true">
     <ion-toolbar color="primary">
-
-        <ion-buttons slot="start" *ngIf="platform.is('desktop')">
-            <ion-menu-button></ion-menu-button>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/rooms"></ion-back-button>
         </ion-buttons>
         <ion-title slot>Room creation</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-grid>
-        <ion-card style="width: 60%; ">
+        <ion-card>
             <ion-card-content>
                 <ion-card-title>
                     Add a new room
@@ -34,5 +32,4 @@
                 </form>
             </ion-card-content>
         </ion-card>
-    </ion-grid>
 </ion-content>
