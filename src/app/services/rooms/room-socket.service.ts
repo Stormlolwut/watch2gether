@@ -3,7 +3,6 @@ import {environment} from '../../../environments/environment';
 import {UserService} from '../user/user.service';
 import * as io from 'socket.io-client';
 import {RoomService} from './room.service';
-import {formatNumber} from '@angular/common';
 
 @Injectable({
     providedIn: 'root'

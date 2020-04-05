@@ -1,8 +1,9 @@
 {
-  "appId": "io.ionic.demo.pg.cap.ng",
-  "appName": "Photo Gallery Cap Ng",
+  "appId": "com.jfm.watchtwogether",
+  "appName": "Watchtwogether",
   "bundledWebRuntime": false,
-  "npmClient": "npm",
+  "windowsAndroidStudioPath": "C:\\Users\\husey\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\192.6241897\\bin\\studio64.exe",
+  "npmClient": "yarn",
   "webDir": "www",
   "cordova": {}
 }

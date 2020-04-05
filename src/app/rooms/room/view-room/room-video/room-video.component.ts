@@ -3,6 +3,7 @@ import {RoomService} from '../../../../services/rooms/room.service';
 import {UserService} from '../../../../services/user/user.service';
 import {IonContent} from '@ionic/angular';
 import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @Component({
     selector: 'app-room-video',
@@ -14,7 +15,8 @@ export class RoomVideoComponent implements OnInit {
 
     constructor(public roomService: RoomService,
                 public userService: UserService,
-                private roomSocket: RoomSocketService) {
+                private roomSocket: RoomSocketService,
+                private vibration: Vibration) {
         setTimeout(() => {
             this.content.scrollToBottom(200);
         }, 1000);
@@ -41,5 +43,6 @@ export class RoomVideoComponent implements OnInit {
 
     nextButtonClicked() {
         this.roomSocket.nextVideo();
+        this.vibration.vibrate(1000);
     }
 }
