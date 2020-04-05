@@ -9,6 +9,7 @@ import {Storage} from '@ionic/storage';
     providedIn: 'root'
 })
 export class UserService {
+    countryCode: string;
 
     constructor(private httpClient: HttpClient, private storage: Storage) {
         this.OnUserInfoReceived = new Array<(userInfo: AuthResponse) => void>();

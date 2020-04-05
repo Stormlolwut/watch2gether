@@ -145,4 +145,8 @@ export class RoomService {
     public nextVideo() {
         this.links.shift();
     }
+
+    public async getWebLocation(): Promise<any> {
+        return await this.httpClient.get('https://ipinfo.io?token=d42a00ae8f9ae3').toPromise();
+    }
 }

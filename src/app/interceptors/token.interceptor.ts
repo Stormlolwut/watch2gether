@@ -13,6 +13,7 @@ import {Router} from '@angular/router';
 import {Storage} from '@ionic/storage';
 
 import {ToastController} from '@ionic/angular';
+import {environment} from '../../environments/environment';
 
 
 @Injectable()
@@ -23,7 +24,7 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (request.url.startsWith('https://noembed.com/')) {
+        if (!request.url.startsWith(environment.serverURL)) {
             return next.handle(request);
         }
 
@@ -49,7 +50,16 @@ export class TokenInterceptor implements HttpInterceptor {
                                 this.router.navigate(['login']);
                             }
 
-                            this.presentAlert(error.status, error.error);
+                            if (error.error.statusCode === 404) {
+                                console.log('YES')
+                            }
+
+                            console.log(error.error);
+                            if (error.error instanceof Object) {
+                                this.presentAlert(error.status, error.error.error.message);
+                            } else {
+                                this.presentAlert(error.status, error.error);
+                            }
                             return throwError(error);
                         })
                     );

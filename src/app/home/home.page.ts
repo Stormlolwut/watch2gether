@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import {AuthResponse} from '../interfaces/auth-response';
 import {UserService} from '../services/user/user.service';

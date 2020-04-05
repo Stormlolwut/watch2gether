@@ -3,6 +3,7 @@ import {environment} from '../../../environments/environment';
 import {UserService} from '../user/user.service';
 import * as io from 'socket.io-client';
 import {RoomService} from './room.service';
+import {RoomUsersInfo} from './room-user-info';
 
 @Injectable({
     providedIn: 'root'
@@ -18,15 +19,17 @@ export class RoomSocketService {
     public onVideoResumed: Array<(timestamp: number) => void>;
     public onNextVideo: Array<() => void>;
     public onTimestampRequested: Array<() => void>;
+    public onUserInfoReceived: Array<(RoomUsersInfo) => void>;
 
     constructor(private userService: UserService) {
         this.onLinkReceived = new Array<(link: string, play: boolean) => void>();
         this.onMessageReceived = new Array<(message: string) => void>();
-        this.onVideoPaused = new Array<(pausedAt: number) => void>()
+        this.onVideoPaused = new Array<(pausedAt: number) => void>();
         this.onVideoResumed = new Array<(timestamp: number) => void>();
         this.onRoomJoined = new Array<() => void>();
         this.onNextVideo = new Array<() => void>();
         this.onTimestampRequested = new Array<() => void>();
+        this.onUserInfoReceived = [];
     }
 
     public async OpenSocket() {
@@ -37,10 +40,13 @@ export class RoomSocketService {
             this.socket.emit('join room', {roomId: this.roomService.selectedRoom.id});
 
             this.socket.on('joined room', (data) => {
-                console.log('hello people');
                 this.onRoomJoined.forEach(value => {
                     value();
                 })
+            });
+
+            this.socket.on('another joined', (data) => {
+
             });
 
             this.socket.on('received message', (data) => {
@@ -97,6 +103,12 @@ export class RoomSocketService {
             this.socket.on('removeVideo', (data) => {
                 this.roomService.links.splice(data.position, 1);
             });
+
+            this.socket.on('send user info', (data) => {
+                this.onUserInfoReceived.forEach(value => {
+                    value(data);
+                })
+            })
         }
     }
 
@@ -138,5 +150,9 @@ export class RoomSocketService {
 
     public removeVideo(position: number) {
         this.socket.emit('removeVideo', {position});
+    }
+
+    sendUserInformation(userInfo: { countryCode: string; userName: string }) {
+        this.socket.emit('send user info', {userInfo});
     }
 }
