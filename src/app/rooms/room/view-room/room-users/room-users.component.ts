@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions} from '@ionic-native/native-geocoder/ngx';
 import {Platform} from '@ionic/angular';
 import {RoomService} from '../../../../services/rooms/room.service';
 import {UserService} from '../../../../services/user/user.service';

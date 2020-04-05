@@ -72,15 +72,11 @@ export class YoutubePlayerAngularComponent implements OnInit {
         if (this.player) {
             if (timestamp) {
                 setTimeout(() => {
-                    if (this.player) {
-                        this.player.seekTo(timestamp + 4, true)
-                        this.player.playVideo();
-                    }
+                    this.player.seekTo(timestamp + 4, true)
+                    this.player.playVideo();
                 }, 4000);
             } else {
-                if (this.player) {
-                    this.player.playVideo();
-                }
+                this.player.playVideo();
             }
         }
     }
@@ -90,9 +86,7 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onTimeStampRequested() {
-        if (this.player) {
-            this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
-        }
+        this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
     }
 
     private onNextVideo() {
@@ -100,9 +94,7 @@ export class YoutubePlayerAngularComponent implements OnInit {
             if (this.roomService.links.length > 0) {
                 this.onPlayVideo(this.roomService.links[0].link);
                 setTimeout(() => {
-                    if (this.player) {
-                        this.player.playVideo();
-                    }
+                    this.player.playVideo();
                 }, 1000)
             }
         }, 1000);

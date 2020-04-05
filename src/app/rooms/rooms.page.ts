@@ -13,13 +13,13 @@ import {UserService} from '../services/user/user.service';
 export class RoomsPage implements OnInit {
 
     public searchOutput: string;
-    public rooms : Array<RoomInterface> = [];
+    public rooms: Array<RoomInterface> = [];
     public filteredRooms: Array<RoomInterface> = [];
 
     private allRoomsLoaded = false;
-    private currentPage : number;
+    private currentPage: number;
 
-    constructor(private menuController: MenuController, public userService: UserService, public roomService: RoomService, private alertController: AlertController) {
+    constructor(private menuController: MenuController, public userService: UserService, public roomService: RoomService) {
         this.currentPage = 0;
         this.getRooms(this.currentPage++);
     }
@@ -28,14 +28,7 @@ export class RoomsPage implements OnInit {
         this.menuController.close();
     }
 
-   /* setRooms(rooms: RoomsResponse) {
-        rooms.rooms.forEach(element => {
-            this.items.push({room: element});
-        });
-        this.items = [...this.items];
-        this.filteredRooms = this.items;
-    }
-*/
+
     public async onCardClick(room: RoomInterface) {
         this.roomService.OpenRoomPage(room);
     }
@@ -44,33 +37,36 @@ export class RoomsPage implements OnInit {
         this.roomService.OpenCreateRoomPage();
     }
 
-    public filterRooms(){
-        if(this.searchOutput === '') return this.filteredRooms = this.rooms;
+    public filterRooms() {
+        if (this.searchOutput === '') return this.filteredRooms = this.rooms;
 
         this.filteredRooms = this.rooms.filter(x => {
-             if(x.categories.includes(this.searchOutput.toLowerCase())){
-                 return x;
-             } else if (x.name.toLowerCase().includes(this.searchOutput.toLowerCase())){
-                 return x;
-             }
+            if (x.categories.includes(this.searchOutput.toLowerCase())) {
+                return x;
+            } else if (x.name.toLowerCase().includes(this.searchOutput.toLowerCase())) {
+                return x;
+            }
         });
     }
+
     public addChipToSearchBar($event, category: string) {
         this.searchOutput = category;
         console.log($event);
         $event.preventDefault();
     }
 
-    async getRooms(page: number){
+    async getRooms(page: number) {
         await this.roomService.getRooms(page, undefined);
 
         this.rooms = this.rooms.concat(this.roomService.rooms);
         this.filteredRooms = this.filteredRooms.concat(this.roomService.rooms);
 
-        if(this.roomService.rooms.length !== 10){ this.allRoomsLoaded = true;}
+        if (this.roomService.rooms.length !== 10) {
+            this.allRoomsLoaded = true;
+        }
     }
 
-    async onRefresh($event){
+    async onRefresh($event) {
         this.currentPage = 0;
         this.rooms = [];
         this.filteredRooms = [];

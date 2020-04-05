@@ -104,6 +104,7 @@ export class RoomSocketService {
             });
 
             this.socket.on('nextVideo', () => {
+                console.log('next video')
                 this.roomService.nextVideo();
                 this.onNextVideo.forEach(value => {
                     value();

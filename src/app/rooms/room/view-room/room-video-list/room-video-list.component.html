@@ -1,8 +1,8 @@
-<ion-grid style="height: 89%; max-height: 89%">
+<ion-grid style="max-height: 50%; overflow-y: scroll;">
     <ion-row>
         <ion-reorder-group (ionItemReorder)="doReorder($event)" disabled="false" style="width: 100%;">
-            <ion-item *ngFor="let item of roomService.links">
-                <ion-label>
+            <ion-item *ngFor="let item of roomService.links; index as i">
+                <ion-label (click)="titleClicked(i)">
                     {{item.title}}
                 </ion-label>
                 <ion-button (click)="onNext(item)" color="transparent">
@@ -10,22 +10,35 @@
                 </ion-button>
                 <ion-reorder slot="end"></ion-reorder>
             </ion-item>
-
         </ion-reorder-group>
     </ion-row>
 </ion-grid>
+<ion-card  *ngIf="youtubeInformation">
+    <ion-card-header>
+        <ion-card-title>{{youtubeInformation.video.title}}</ion-card-title>
+    </ion-card-header>
 
-<ion-grid>
-    <ion-row>
-        <ion-col size="10">
-            <ion-item>
-                <ion-input (ionChange)="inputChange($event)"></ion-input>
-            </ion-item>
-        </ion-col>
-        <ion-col size="2">
-            <ion-fab-button (click)="addVideo()">
-                <ion-icon name="add"></ion-icon>
-            </ion-fab-button>
-        </ion-col>
-    </ion-row>
-</ion-grid>
+    <ion-card-content>
+        {{youtubeInformation.video.description}}<br>
+
+        link: {{youtubeInformation.video.link}}<br>
+    </ion-card-content>
+</ion-card>
+
+<ion-card>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="10">
+                <ion-item>
+                    <ion-input (ionChange)="inputChange($event)"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-col size="2">
+                <ion-fab-button (click)="addVideo()">
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-card>

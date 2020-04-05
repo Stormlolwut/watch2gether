@@ -53,7 +53,10 @@ export class RoomVideoComponent implements OnInit {
 
     nextButtonClicked() {
         this.roomSocket.nextVideo();
-        this.vibration.vibrate(500);
+        if(this.roomService.links.length === 0)
+        {
+            this.vibration.vibrate(500);
+        }
     }
 
     private fetchUserRoleFromRoom(): Array<string> {

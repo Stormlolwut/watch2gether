@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
 import {ToastController} from '@ionic/angular';
 import {RoomService} from '../../../../services/rooms/room.service';
+import {YoutubeInformation} from '../../../youtubePlayer/youtube-information';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-room-video-list',
@@ -10,10 +13,12 @@ import {RoomService} from '../../../../services/rooms/room.service';
 })
 export class RoomVideoListComponent implements OnInit {
     private newUrl: string;
+    public youtubeInformation: YoutubeInformation = null;
 
     constructor(private roomSocket: RoomSocketService,
                 public roomService: RoomService,
-                private toastController: ToastController,) {
+                private toastController: ToastController,
+                private httpClient: HttpClient) {
     }
 
     ngOnInit() {
@@ -47,12 +52,9 @@ export class RoomVideoListComponent implements OnInit {
     }
 
     doReorder(ev: CustomEvent) {
-        if(ev.detail.from === ev.detail.to - 1)
-        {
+        if (ev.detail.from === ev.detail.to - 1) {
             ev.detail.complete();
-        }
-        else if(ev.detail.to === this.roomService.links.length)
-        {
+        } else if (ev.detail.to === this.roomService.links.length) {
             ev.detail.to--;
         }
 
@@ -64,5 +66,13 @@ export class RoomVideoListComponent implements OnInit {
 
     public onNext(item: { link: string, title: string }) {
         this.roomSocket.removeVideo(this.roomService.links.indexOf(item));
+    }
+
+    titleClicked(i: number) {
+        this.httpClient.get<YoutubeInformation>(`${environment.serverURL}/rooms/${this.roomService.selectedRoom.id}/videos/${i}`)
+            .subscribe((response) => {
+                this.youtubeInformation = response;
+                console.log(this.youtubeInformation);
+            })
     }
 }

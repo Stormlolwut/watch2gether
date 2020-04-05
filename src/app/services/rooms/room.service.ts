@@ -7,6 +7,7 @@ import {Injectable} from '@angular/core';
 import {RoomResponse} from 'src/app/interfaces/room-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoomSocketService} from './room-socket.service';
+import {YoutubeInformation} from '../../rooms/youtubePlayer/youtube-information';
 
 @Injectable({
     providedIn: 'root'
