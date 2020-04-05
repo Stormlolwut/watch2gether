@@ -8,6 +8,8 @@ import {RoomVideoComponent} from './room-video/room-video.component';
 import {RoomVideoListComponent} from './room-video-list/room-video-list.component';
 import {RoomUsersComponent} from './room-users/room-users.component';
 import {Vibration} from '@ionic-native/vibration/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
     imports: [
@@ -16,7 +18,7 @@ import {Vibration} from '@ionic-native/vibration/ngx';
         YouTubePlayerModule,
     ],
     declarations: [RoomPage, YoutubePlayerAngularComponent, RoomVideoComponent, RoomVideoListComponent, RoomUsersComponent],
-    providers: [Vibration]
+    providers: [Vibration, Geolocation, NativeGeocoder]
 })
 export class RoomPageModule {
 }

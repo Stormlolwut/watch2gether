@@ -1,3 +1,17 @@
-<p>
-  room-users works!
-</p>
+<ion-list>
+    <ion-item *ngFor="let user of this.users">
+        <ion-label>{{user.userName}}</ion-label>
+        <ion-img style="height: 50%" [src]="user.src"></ion-img>
+
+        <div *ngIf="user.userName === userService.currentUser.user.name; else otherUser">
+            <ion-chip color="primary">
+                <ion-label>you</ion-label>
+            </ion-chip>
+        </div>
+        <ng-template #otherUser>
+            <ion-chip color="success">
+                <ion-label>Joined</ion-label>
+            </ion-chip>
+        </ng-template>
+    </ion-item>
+</ion-list>

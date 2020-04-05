@@ -974,6 +974,20 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/geolocation@^5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/geolocation/-/geolocation-5.23.0.tgz#3db896e9698ceb762a79a03e7f538b9da6a754fe"
+  integrity sha512-CELPFjXB9qCEwrXBsti2BhDN9CVHBnkWPRfDUpAfoAZiyZuace3/wBKrIuIk9bXKJiUX/1burlW6okeR8ID1dg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/native-geocoder@^5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/native-geocoder/-/native-geocoder-5.23.0.tgz#302a1da4f8868113c20f4184e1ab8b5565518e05"
+  integrity sha512-xKxr5nECN2KuuO4JlkAVg0mOqgr8Bh9roFCjJuZDeBDQMApeEgEynjX5Nd+zTAnqyhJDQ7TIkwMRvTi6hPoW4Q==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/toast@^5.23.0":
   version "5.23.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/toast/-/toast-5.23.0.tgz#c1814592dff3fa81867bd4572a0556879b737199"
@@ -2678,6 +2692,11 @@ cordova-plugin-device@^2.0.2:
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
   integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
 
+cordova-plugin-geolocation@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-geolocation/-/cordova-plugin-geolocation-4.0.2.tgz#4668a01ae8a49e27c5515f8b81880983e96d7eb3"
+  integrity sha512-QGThnPKzPxESHkruZlpE0+5aFBVOet8al0vIJ7laSUOQHIC1dd/JY6peVIbtLboKi5Dap1wCKRubOqPqH8xcQA==
+
 cordova-plugin-ionic-keyboard@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-keyboard/-/cordova-plugin-ionic-keyboard-2.2.0.tgz#53ba9ccd5e765165446a094cfe042a2ddd87d81d"
@@ -2687,6 +2706,11 @@ cordova-plugin-ionic-webview@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-4.1.3.tgz#7f3963208708951fedd975c0808a5d27382812a7"
   integrity sha512-hlrUF0kLjjEkZmpYlLJO0NnXmVjMmQ3MOZVXm1ytDihLPKHklYCOpCvjA5Wz3hJrPD1shFEsqi/SPnp873AsdQ==
+
+cordova-plugin-nativegeocoder@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-nativegeocoder/-/cordova-plugin-nativegeocoder-3.4.0.tgz#a411463ee1cc72b7d335ca69978fb629ec0c0973"
+  integrity sha512-LZGJXCj5AXvQC+p2D9usHjk5i7Dm0nhfus4db2afIHDWC04ygHoHmn5rwj+qGLM6cr3Qy33+qkCh6OHGgwQpaw==
 
 cordova-plugin-splashscreen@^5.0.2:
   version "5.0.3"
