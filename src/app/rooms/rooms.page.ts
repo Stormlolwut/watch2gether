@@ -62,12 +62,21 @@ export class RoomsPage implements OnInit {
     }
 
     async getRooms(page: number){
-        await this.roomService.getRooms(page);
+        await this.roomService.getRooms(page, undefined);
 
         this.rooms = this.rooms.concat(this.roomService.rooms);
         this.filteredRooms = this.filteredRooms.concat(this.roomService.rooms);
 
         if(this.roomService.rooms.length !== 10){ this.allRoomsLoaded = true;}
+    }
+
+    async onRefresh($event){
+        this.currentPage = 0;
+        this.rooms = [];
+        this.filteredRooms = [];
+
+        await this.getRooms(this.currentPage++);
+        return $event.target.complete();
     }
 
     async loadData($event) {

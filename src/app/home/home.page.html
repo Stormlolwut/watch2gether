@@ -1,25 +1,52 @@
 <ion-toolbar color="primary">
-  <ion-buttons slot="secondary" *ngIf="!canShowLogoutButton">
-    <ion-button [routerLink]="['/login']">
-      Login
-    </ion-button>
-  </ion-buttons>
-  <ion-buttons slot="start" *ngIf="canShowLogoutButton" >
-    <ion-button color="danger" [routerLink]="['/login']" (click)="logout()">
-      Logout
-    </ion-button>
-  </ion-buttons>
-  <ion-buttons slot="primary" *ngIf="canShowLogoutButton" >
-    <ion-button [routerLink]="['/rooms']">
-      Rooms
-    </ion-button>
-  </ion-buttons>
-  <ion-title>Home</ion-title>
+    <ion-buttons slot="secondary" *ngIf="!canShowLogoutButton">
+        <ion-button [routerLink]="['/login']">
+            Login
+        </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="canShowLogoutButton">
+        <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Home</ion-title>
 </ion-toolbar>
 
 <ion-content>
-  <ion-grid fixed>
-    <ion-row>
-    </ion-row>
-  </ion-grid>
+    <ion-card>
+        <ion-card-header>
+            <header style="font-size: 20px">
+                {{user.user.id}}
+                <ion-chip color="success">
+                    {{user.user.role}}
+                </ion-chip>
+            </header>
+            <footer>{{user.user.email}} </footer>
+        </ion-card-header>
+        <ion-card-content>
+
+        </ion-card-content>
+    </ion-card>
+    <ion-searchbar inputmode="search" [(ngModel)]="searchOutput" (ionChange)="filterRooms()"></ion-searchbar>
+    <ion-list>
+        <ion-card class="list-card" *ngFor="let i of filteredRooms" (click)="onCardClick(i)">
+            <ion-card-header>
+                <ion-card-title>{{ i.name }}</ion-card-title>
+                <ion-chip *ngFor="let category of i.categories">
+                    <ion-label
+                            (click)="$event.stopPropagation();addChipToSearchBar($event, category) ">{{ category }}</ion-label>
+                </ion-chip>
+            </ion-card-header>
+            <ion-item>
+                <ion-icon name="lock-open-outline" slot="end" *ngIf="!i.password"></ion-icon>
+                <ion-icon name="lock-closed-outline" slot="end" *ngIf="i.password"></ion-icon>
+            </ion-item>
+        </ion-card>
+    </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
 </ion-content>

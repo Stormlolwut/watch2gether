@@ -10,24 +10,23 @@ import { Component, OnInit } from '@angular/core';
 export class MenuComponent implements OnInit {
   public username = '';
 
-  public selectedIndex = 0;
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/',
-      icon: 'home'
-    },
-    {
-      title: 'Rooms',
-      url: '/rooms',
-      icon: 'images'
-    },
-    // {
-    //   title: 'Profile',
-    //   url: '/profile',
-    //   icon: 'person'
-    // }
-  ];
+  public home = {
+    title: 'Home',
+    url: '/',
+    icon: 'home',
+    selected: false
+  };
+  public rooms = {
+    title: 'Rooms',
+    url: '/rooms',
+    icon: 'images',
+    selected: false,
+  };
+  public logOut = {
+    title: 'Logout',
+    url: '/login',
+    icon: 'arrow-undo',
+  };
 
   constructor(
     private userService: UserService,
@@ -41,13 +40,14 @@ export class MenuComponent implements OnInit {
     this.username = userInfo.user.id;
   }
 
+  async logout(){
+    await this.userService.Logout();
+  }
+
   ngOnInit() {
     const path = window.location.pathname.split('/')[1];
 
-    if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(
-        page => page.title.toLowerCase() === path.toLowerCase()
-      );
-    }
+    this.home.selected = this.home.url === path;
+    this.rooms.selected = this.rooms.url === path;
   }
 }

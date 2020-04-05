@@ -25,7 +25,7 @@
                 <ion-icon name="play-skip-forward-outline"></ion-icon>
                 <ion-label>Skip Video</ion-label>
             </ion-button>
-            <ion-button (click)="settingsButtonClicked()">
+            <ion-button *ngIf="isOwner" (click)="settingsButtonClicked()">
                 <ion-icon name="cog-outline"></ion-icon>
             </ion-button>
         </ion-card-content>
