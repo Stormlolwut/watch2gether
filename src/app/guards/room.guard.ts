@@ -21,9 +21,7 @@ export class RoomGuard implements CanActivate {
 
         const result = await this.roomService.getRoom(next.params.id);
         const roomResponse = result.room;
-        
         let password: string;
-        console.log(roomResponse);
 
         if (roomResponse.password !== '' && !this.userAlreadyInRoom(roomResponse)) {
             const alert = await this.alertController.create({
@@ -58,6 +56,7 @@ export class RoomGuard implements CanActivate {
 
         const currentUser = this.userService.currentUser.user.id.toString();
         for (const user of roomResponse.users){
+            console.log(user.user + ' ' + currentUser);
             if(user.user === currentUser){
                 return true;
             }
