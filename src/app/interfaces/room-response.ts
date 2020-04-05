@@ -1,21 +1,20 @@
 import {UserResponseInterface} from './auth-response';
 
 export interface RoomResponse {
-    room: {
-        id: string,
-        name: string,
-        password: string,
-        picture: string,
-        categories: [string],
-        users: [],
-        blacklist: {
-            enabled: boolean,
-            [userId: number]: string
-        },
-        queue: Array<QueueInterface>,
-        messages: Array<MessageInterface>,
-        videos: Array<VideosInterface>
-    }
+
+    id: string,
+    name: string,
+    password: string,
+    picture: string,
+    categories: [string],
+    users: [],
+    blacklist: {
+        enabled: boolean,
+        [userId: number]: string
+    },
+    queue: Array<QueueInterface>,
+    messages: Array<MessageInterface>,
+    videos: Array<VideosInterface>
 }
 
 export interface QueueInterface {
