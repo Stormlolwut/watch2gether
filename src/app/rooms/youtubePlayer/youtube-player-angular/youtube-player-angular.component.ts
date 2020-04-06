@@ -86,7 +86,10 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onTimeStampRequested() {
-        this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
+        if(this.player)
+        {
+            this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
+        }
     }
 
     private onNextVideo() {
