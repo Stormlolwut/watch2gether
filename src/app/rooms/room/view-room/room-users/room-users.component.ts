@@ -25,8 +25,6 @@ export class RoomUsersComponent implements OnInit {
                 private platform: Platform) {
         if (this.roomSocketService.onUserInfoReceived.length === 0)
             this.roomSocketService.onUserInfoReceived.push((users) => this.onUsersReceived(users))
-        if (this.roomSocketService.onRoomJoined.length !== 2)
-            this.roomSocketService.onRoomJoined.push(() => this.onOtherUserJoined())
     }
 
     ngOnInit() {
@@ -108,14 +106,12 @@ export class RoomUsersComponent implements OnInit {
             for (const user of users) {
                 for (const roomUser of this.roomUsers) {
                     if (roomUser.name === user.userName) {
+                        console.log(roomUser.name);
                         roomUser.src = user.src;
                         roomUser.joined = true;
                     }
                 }
             }
         });
-    }
-
-    private onOtherUserJoined() {
     }
 }

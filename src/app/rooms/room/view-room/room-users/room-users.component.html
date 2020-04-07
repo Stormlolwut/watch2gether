@@ -6,7 +6,7 @@
             <ion-icon color="success" name="shield-checkmark-outline" *ngIf="user.roles.includes('admin');"></ion-icon>
             <ion-icon style="color: gold" name="star-outline" *ngIf="user.roles.includes('owner');"></ion-icon>
         </ion-label>
-        <ion-img style="height: 50%" [src]="user.src"></ion-img>
+        <ion-img style="height: 50%" alt="" [src]="user.src"></ion-img>
 
         <div *ngIf="user.name === userService.currentUser.user.name; else otherUser">
             <ion-chip color="primary">

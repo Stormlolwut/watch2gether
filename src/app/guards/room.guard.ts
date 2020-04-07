@@ -43,7 +43,7 @@ export class RoomGuard implements CanActivate {
 
         this.roomService.selectedRoom = roomResponse;
 
-        this.roomService.setLinksOfRoom();
+        await this.roomService.setLinksOfRoom();
         await this.roomService.getMessages();
         await this.roomSocket.OpenSocket();
         await this.roomService.setUser(next.params.id, password);

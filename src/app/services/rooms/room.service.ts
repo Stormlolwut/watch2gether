@@ -13,13 +13,14 @@ import {YoutubeInformation} from '../../rooms/youtubePlayer/youtube-information'
     providedIn: 'root'
 })
 export class RoomService {
+    public player: YT.Player;
+
     public newMsg = '';
     public messages: Array<any>;
     public rooms: Array<any>;
     public links: { link: string, title: string }[] = [];
 
     public selectedRoom: RoomInterface;
-    public onPlayVideo: Array<(link: string) => void>;
 
     constructor(
         private httpClient: HttpClient,
@@ -29,24 +30,20 @@ export class RoomService {
         private roomSocket: RoomSocketService
     ) {
         this.messages = new Array<any>();
-        this.onPlayVideo = new Array<(link: string) => void>();
         this.roomSocket.roomService = this;
 
 
         if (roomSocket.onMessageReceived.length !== 2)
-            roomSocket.onMessageReceived.push((username, message) => this.OnMessageReceived(username, message)
-            );
-        if (roomSocket.onLinkReceived.length === 0)
-            roomSocket.onLinkReceived.push((url, play) => this.onLinkReceived(url, play));
+            roomSocket.onMessageReceived.push((username, message) => this.OnMessageReceived(username, message));
     }
 
     public async getRooms(page: number, id: string) {
         const userParam = (id !== undefined) ? `&user=${id}` : '';
 
-        await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}`+ userParam)
+        await this.httpClient.get<RoomsResponse>(environment.serverURL + `/rooms?pageIndex=${page}` + userParam)
             .toPromise().then((value) => {
-            this.rooms = value.rooms;
-        });
+                this.rooms = value.rooms;
+            });
     }
 
     public OpenRoomPage(response: RoomInterface) {
@@ -112,28 +109,17 @@ export class RoomService {
         });
     }
 
-    public setLinksOfRoom() {
+    public async setLinksOfRoom() {
         this.links = new Array<{ link: string, title: string }>(this.selectedRoom.queue.length);
-        this.selectedRoom.queue.forEach((value, index) => {
+        let index = 0;
+        for (const queue of this.selectedRoom.queue) {
             this.links[index] = {link: 'loading', title: 'loading'};
-            this.httpClient.get<any>(`https://noembed.com/embed?url=${value.link}`)
+            await this.httpClient.get<any>(`https://noembed.com/embed?url=${queue.link}`)
                 .subscribe((json) => {
-                        this.links[value.position] = {link: value.link, title: json.title};
-                    },
-                    error => console.error(error));
-        });
-    }
+                    this.links[queue.position] = {link: queue.link, title: json.title};
+                }, error => console.error(error));
 
-    private onLinkReceived(link: string, play: boolean) {
-        this.httpClient.get<any>(`https://noembed.com/embed?url=${link}`)
-            .subscribe((json) => {
-                    this.links.push({link, title: json.title});
-                },
-                error => console.error(error));
-        if (play) {
-            this.onPlayVideo.forEach(value => {
-                value(link);
-            })
+            index++;
         }
     }
 
