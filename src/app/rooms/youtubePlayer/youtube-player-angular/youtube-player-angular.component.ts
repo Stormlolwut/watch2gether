@@ -46,9 +46,17 @@ export class YoutubePlayerAngularComponent implements OnInit {
             }
         });
 
+        this.tryLoadPlayer();
+    }
+
+    tryLoadPlayer() {
         setTimeout(() => {
             if (this.roomService.links.length > 0) {
-                this.onPlayVideo(this.roomService.links[0].link);
+                if (this.player) {
+                    this.onPlayVideo(this.roomService.links[0].link);
+                } else {
+                    this.tryLoadPlayer();
+                }
             }
         }, 1000);
     }
@@ -72,9 +80,11 @@ export class YoutubePlayerAngularComponent implements OnInit {
         if (this.player) {
             if (timestamp) {
                 setTimeout(() => {
-                    this.player.seekTo(timestamp + 4, true)
-                    this.player.playVideo();
-                }, 4000);
+                    if (this.player) {
+                        this.player.seekTo(timestamp + 1, true)
+                        this.player.playVideo();
+                    }
+                }, 1000);
             } else {
                 this.player.playVideo();
             }
@@ -86,8 +96,7 @@ export class YoutubePlayerAngularComponent implements OnInit {
     }
 
     private onTimeStampRequested() {
-        if(this.player)
-        {
+        if (this.player) {
             this.roomSocket.sendCurrentTimestamp(this.player.getCurrentTime());
         }
     }

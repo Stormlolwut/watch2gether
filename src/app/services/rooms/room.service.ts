@@ -51,7 +51,7 @@ export class RoomService {
 
     public OpenRoomPage(response: RoomInterface) {
         this.selectedRoom = response;
-        this.router.navigate(['/room', response.id]);
+        this.router.navigate(['/rooms', response.id]);
     }
 
     public async CreateRoom(name: string, password: string, categoriesUnfiltered: string): Promise<RoomResponse> {

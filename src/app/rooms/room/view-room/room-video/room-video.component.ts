@@ -87,6 +87,6 @@ export class RoomVideoComponent implements OnInit {
     }
 
     settingsButtonClicked() {
-        this.router.navigate([`room/${this.roomService.selectedRoom.id}/settings`]);
+        this.router.navigate([`rooms/${this.roomService.selectedRoom.id}/settings`]);
     }
 }

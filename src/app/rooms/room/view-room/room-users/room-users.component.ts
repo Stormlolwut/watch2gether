@@ -6,6 +6,8 @@ import {UserService} from '../../../../services/user/user.service';
 import {RoomSocketService} from '../../../../services/rooms/room-socket.service';
 import {RoomUsersInfo} from '../../../../services/rooms/room-user-info';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../../../environments/environment';
+import {UserListInterface} from '../../../youtubePlayer/youtube-information';
 
 @Component({
     selector: 'app-room-users',
@@ -13,8 +15,7 @@ import {HttpClient} from '@angular/common/http';
     styleUrls: ['./room-users.component.scss'],
 })
 export class RoomUsersComponent implements OnInit {
-
-    public users: Array<{ userName: string, countryCode: string, src: string }> = [];
+    public roomUsers: Array<UserListInterface> = [];
 
     constructor(private roomService: RoomService,
                 private roomSocketService: RoomSocketService,
@@ -38,7 +39,7 @@ export class RoomUsersComponent implements OnInit {
                     const countryCode = this.getCountry(response.results[0].address_components);
                     this.userService.countryCode = countryCode;
                     const userInfo = {
-                        userName: this.userService.currentUser.user.name,
+                        userName: this.userService.currentUser.user.id,
                         countryCode,
                         src: `https://www.countryflags.io/${countryCode}/flat/64.png`
                     };
@@ -52,7 +53,7 @@ export class RoomUsersComponent implements OnInit {
             this.roomService.getWebLocation().then(value => {
                 this.userService.countryCode = value.country;
                 const userInfo = {
-                    userName: this.userService.currentUser.user.name,
+                    userName: this.userService.currentUser.user.id,
                     countryCode: value.country,
                     src: `https://www.countryflags.io/${this.userService.countryCode}/flat/64.png`
                 };
@@ -79,25 +80,40 @@ export class RoomUsersComponent implements OnInit {
     }
 
     public onUsersReceived(roomUserInfo: RoomUsersInfo) {
-        this.users = [];
+        this.roomUsers = [];
+        const users = [];
 
-        const userInfo = {
-            userName: this.userService.currentUser.user.name,
-            countryCode: this.userService.countryCode,
-            src: `https://www.countryflags.io/${this.userService.countryCode}/flat/64.png`
-        };
-        this.users.push(userInfo);
-
-        for (const user of roomUserInfo.users) {
-            const username = user.userName;
-            if (username !== this.userService.currentUser.user.name) {
-                this.users.push({
-                    userName: user.userName,
-                    countryCode: user.countryCode,
-                    src: `https://www.countryflags.io/${user.countryCode}/flat/64.png`
-                });
+        this.httpClient.get<any>(`${environment.serverURL}/rooms/${this.roomService.selectedRoom.id}/users`).subscribe((response) => {
+            for (const user of response.users) {
+                this.roomUsers.push({name: user.user, roles: user.roles, src: '', joined: false});
             }
-        }
+
+            const userInfo = {
+                userName: this.userService.currentUser.user.id,
+                src: `https://www.countryflags.io/${this.userService.countryCode}/flat/64.png`,
+            };
+
+            users.push(userInfo);
+
+            for (const user of roomUserInfo.users) {
+                const username = user.userName;
+                if (username !== this.userService.currentUser.user.id) {
+                    users.push({
+                        userName: user.userName,
+                        src: `https://www.countryflags.io/${user.countryCode}/flat/64.png`,
+                    });
+                }
+            }
+
+            for (const user of users) {
+                for (const roomUser of this.roomUsers) {
+                    if (roomUser.name === user.userName) {
+                        roomUser.src = user.src;
+                        roomUser.joined = true;
+                    }
+                }
+            }
+        });
     }
 
     private onOtherUserJoined() {

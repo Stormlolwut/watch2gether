@@ -45,7 +45,7 @@ export class RoomSocketService {
                 this.socket = io(environment.serverURL + '/chat', {forceNew: true, query: {token}});
             }
 
-            this.socket.removeAllListeners()
+            this.socket.removeAllListeners();
             this.socket.emit('join room', {roomId: this.roomService.selectedRoom.id});
 
             this.socket.on('joined room', (data) => {

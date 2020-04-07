@@ -21,17 +21,13 @@ const routes: Routes = [
     canActivate: [UserGuard]
   },
   {
-    path: 'room',
-    redirectTo: 'rooms'
-  },
-  {
-    path: 'room/:id',
+    path: 'rooms/:id',
     loadChildren: () => import('./rooms/room/view-room/room.module').then(m => m.RoomPageModule),
     canActivate: [UserGuard, RoomGuard],
     canDeactivate: [CanDeactivateRoomGuard],
   },
   {
-    path: 'room/:id/settings',
+    path: 'rooms/:id/settings',
     loadChildren: () => import('./rooms/room/settings-room/settings-room.module').then(m => m.SettingsRoomPageModule),
     canActivate: [UserGuard, RoomGuard],
     canDeactivate: [CanDeactivateRoomGuard],

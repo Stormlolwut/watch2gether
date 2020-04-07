@@ -15,7 +15,7 @@ export class SettingsRoomPage implements OnInit {
     public room: RoomInterface;
     public newRoom: FormGroup;
 
-    constructor(private roomService: RoomService, private route : Router) {
+    constructor(private roomService: RoomService, private route: Router) {
         this.room = roomService.selectedRoom;
 
         this.newRoom = new FormGroup({
@@ -31,16 +31,21 @@ export class SettingsRoomPage implements OnInit {
 
     async updateRoom() {
         if (this.newRoom.valid) {
-          console.log(this.newRoom);
+            const newName = (this.newRoom.value.name) ?
+                this.newRoom.value.name.toString().toLowerCase() : this.roomService.selectedRoom.name;
+            const newPassword = (this.newRoom.value.password) ?
+                this.newRoom.value.password.toString() : this.roomService.selectedRoom.password;
+
             const room = {
-                name: this.newRoom.value.name.toString(),
-                password: this.newRoom.value.name.toString()
+                name: newName,
+                password: newPassword
             };
             const response = await this.roomService.updateRoom(room);
 
             if (response.statusCode) {
                 this.roomService.selectedRoom = response.room;
-                await this.route.navigate([`room/${response.room.id}`])
+                await this.route.navigate(['rooms']);
+                await this.route.navigate([`rooms/${response.room.id.toLowerCase()}`])
             }
         }
     }

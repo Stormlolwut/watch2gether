@@ -8,3 +8,10 @@ export interface YoutubeInformation {
         timestamp: Date,
     }
 }
+
+export interface UserListInterface {
+    name: string,
+    roles: Array<string>,
+    joined: boolean,
+    src: string,
+}

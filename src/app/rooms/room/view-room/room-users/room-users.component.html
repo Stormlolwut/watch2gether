@@ -1,17 +1,29 @@
 <ion-list>
-    <ion-item *ngFor="let user of this.users">
-        <ion-label>{{user.userName}}</ion-label>
+    <ion-item *ngFor="let user of this.roomUsers">
+        <ion-label>
+            {{user.name}}
+
+            <ion-icon color="success" name="shield-checkmark-outline" *ngIf="user.roles.includes('admin');"></ion-icon>
+            <ion-icon style="color: gold" name="star-outline" *ngIf="user.roles.includes('owner');"></ion-icon>
+        </ion-label>
         <ion-img style="height: 50%" [src]="user.src"></ion-img>
 
-        <div *ngIf="user.userName === userService.currentUser.user.name; else otherUser">
+        <div *ngIf="user.name === userService.currentUser.user.name; else otherUser">
             <ion-chip color="primary">
                 <ion-label>you</ion-label>
             </ion-chip>
         </div>
         <ng-template #otherUser>
-            <ion-chip color="success">
-                <ion-label>Joined</ion-label>
-            </ion-chip>
+            <div *ngIf="user.joined; else offline">
+                <ion-chip color="success">
+                    <ion-label>Joined</ion-label>
+                </ion-chip>
+            </div>
+            <ng-template #offline>
+                <ion-chip color="warning">
+                    <ion-label>Offline</ion-label>
+                </ion-chip>
+            </ng-template>
         </ng-template>
     </ion-item>
 </ion-list>

@@ -46,6 +46,11 @@ export class TokenInterceptor implements HttpInterceptor {
                             return event;
                         }),
                         catchError((error: HttpErrorResponse) => {
+                            if(error.status === 0)
+                            {
+                                this.presentAlert(error.status, 'No connection with the server :(')
+                            }
+
                             if (!token || (error.status && error.status === 401)) {
                                 this.router.navigate(['login']);
                             }
