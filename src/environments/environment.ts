@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverURL: 'https://coop-stream.herokuapp.com',
+  serverURL: 'https://643d29094f71.ngrok.io',
 };
 
 /*

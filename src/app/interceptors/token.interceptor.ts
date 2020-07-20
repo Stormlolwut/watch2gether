@@ -48,7 +48,7 @@ export class TokenInterceptor implements HttpInterceptor {
                         catchError((error: HttpErrorResponse) => {
                             if(error.status === 0)
                             {
-                                this.presentAlert(error.status, 'No connection with the server :(')
+                                this.presentAlert(error.status, 'No connection with the server :( ' + environment.serverURL);
                             }
 
                             if (!token || (error.status && error.status === 401)) {
